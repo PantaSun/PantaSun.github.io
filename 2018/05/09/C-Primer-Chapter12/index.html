@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    C++Primer--Chapter12 |  Panta&#39; Blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/images/bitbug_favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-C-Primer-Chapter12"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  C++Primer--Chapter12
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2018/05/09/C-Primer-Chapter12/" class="article-date">
+  <time datetime="2018-05-09T09:56:02.000Z" itemprop="datePublished">2018-05-09</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Reading-notes/">Reading notes</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">3.5k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">12 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="第十二章-动态内存"><a href="#第十二章-动态内存" class="headerlink" title="第十二章 动态内存"></a>第十二章 动态内存</h2><ul>
+<li>除了自动和static对象外，C++还支持动态分配对象。</li>
+<li>动态分配对象的生存期与它们在哪里创建无关，只是当显示地被释放时，这些对象才会销毁。</li>
+<li>为了更安全的使用动态对象，标准库定义了两个智能指针类型来管理动态分配的对象。</li>
+<li>当一个对象应该被释放时，指向它的智能指针可以确保自动的释放它。</li>
+<li>静态内存和栈内存：分配在静态内存或栈内存的对象由编译器自动创建和销毁<ul>
+<li>静态内存用来保存局部static对象、类static数据成员以及定义在任何函数之外的变量。</li>
+<li>栈内存用来保存定义在函数内的非static对象。</li>
+</ul>
+</li>
+<li>除了静态内存和栈内存，每个程序还拥有一个内存池，这部分内存被称为自由空间或堆。</li>
+<li>程序用堆来存储动态分配的对象，即那些在程序运行时分配的对象。</li>
+</ul>
+<h3 id="动态内存与智能指针"><a href="#动态内存与智能指针" class="headerlink" title="动态内存与智能指针"></a>动态内存与智能指针</h3><ul>
+<li><p>C++中动态内存是通过一对运算符来完成的：</p>
+<ul>
+<li>new：在动态内存中为对象分配空间并返回一个指向该对象的指针，可以选择对对象初始化。</li>
+<li>delete：接受一个动态对象的指针，销毁该对象，并释放与之关联的内存。</li>
+</ul>
+</li>
+<li><p>为了更容易的使用动态内存，新标准库提供了两种智能指针来管理对象。</p>
+<ul>
+<li>shared_ptr：允许多个指针指向同一个对象</li>
+<li>unique_ptr：独占所有指向的对象</li>
+<li>weak_ptr：它是一种若引用，指向share_ptr所管理的对象。</li>
+<li>这三种类型都定义在memory头文件中。</li>
+</ul>
+</li>
+<li><p>智能指针与普通指针的区别是它负责自动释放所指向的对象。</p>
+</li>
+</ul>
+<h4 id="share-ptr类"><a href="#share-ptr类" class="headerlink" title="share_ptr类"></a>share_ptr类</h4><ul>
+<li><p>智能指针也是模版，所以在创建时需要提供指针可以指向的类型。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; p1; <span class="comment">// 可以指向string</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&gt; p2; <span class="comment">// 可以指向int的list</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>默认初始化的智能指针中保存着一个空指针。</p>
+</li>
+<li><p>make_shared函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; p3 = make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>); <span class="comment">// 指向一个值为43的int的shared_ptr</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="built_in">string</span>&gt; p4 = make_shared&lt;<span class="built_in">string</span>&gt;(<span class="number">10</span>, <span class="string">'9'</span>); <span class="comment">// 指向一个值为“9999999999”的string</span></span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; p5 = make_shared&lt;<span class="keyword">int</span>&gt; (); <span class="comment">//指向一个初始化的int，即值为0</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="shared-ptr的拷贝和赋值"><a href="#shared-ptr的拷贝和赋值" class="headerlink" title="shared_ptr的拷贝和赋值"></a>shared_ptr的拷贝和赋值</h5><ul>
+<li><p>当进行拷贝或赋值操作时，每个shared_ptr都会记录有多少个其他的shared_ptr指向相同的对象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> p = make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>); <span class="comment">//p指向的对象只有p这一个引用者</span></span><br><span class="line">autp q = p; <span class="comment">//p和q指向相同的对象，此对象有两个引用</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>每个shared_ptr都有一个关联的计数器，通常称为引用计数。</p>
+</li>
+<li><p>无论何时拷贝一个shared_ptr，计数器都会递增。</p>
+</li>
+<li><p>当给一个shared_ptr赋一个新值或是shared_ptr被销毁，计数器就会递减。</p>
+</li>
+<li><p>当一个shared_ptr的计数器变为0，它就会自动释放自己所管理的对象。</p>
+</li>
+<li><p>对于一块内存，shared_ptr类保证只要有任何shared_ptr对象引用它，它就不会被释放掉。</p>
+</li>
+<li><p>如果将shared_ptr存放在一个容器中，而后不再需要全部元素，而只适用其中的一部分，要记得用erase删除不再需要的元素。</p>
+</li>
+</ul>
+<h5 id="使用了动态生存期的资源的类"><a href="#使用了动态生存期的资源的类" class="headerlink" title="使用了动态生存期的资源的类"></a>使用了动态生存期的资源的类</h5><ul>
+<li>程序使用动态内存处于以下三个原因之一：<ul>
+<li>程序不知道自己需要使用多少对象：容器类就是出于这个原因而使用动态内存的一个典型的例子。</li>
+<li>程序不知道所需对象的准确类型</li>
+<li>程序需要在多个对象间共享数据</li>
+</ul>
+</li>
+</ul>
+<h4 id="直接管理内存"><a href="#直接管理内存" class="headerlink" title="直接管理内存"></a>直接管理内存</h4><h5 id="使用new动态分配和初始化对象"><a href="#使用new动态分配和初始化对象" class="headerlink" title="使用new动态分配和初始化对象"></a>使用new动态分配和初始化对象</h5><ul>
+<li><p>在自由空间分配的内存是无名的，因此new无法为其分配的对象命名，而是返回一个指向该对象的指针。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *pi = <span class="keyword">new</span> <span class="keyword">int</span>; <span class="comment">// pi是一个指向动态分配的、未初始化的无名对象</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>默认情况下，动态分配的对象是默认初始化的，这意味着内置类型或组合类型的对象的值将是未定义的，而类类型对象将用默认构造函数进行初始化。</p>
+</li>
+<li><p>也可以对动态分配的对象进行值初始化，只需要在类型名之后跟一对小括号()即可：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> p* = <span class="keyword">new</span> <span class="built_in">string</span>();</span><br><span class="line"><span class="keyword">int</span> *p2 = <span class="keyword">new</span> <span class="keyword">int</span>();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于定义了自己的构造函数的类类型，要求值初始化是没有意义的；不管采用什么形式，对象都会通过默认构造函数来初始化。</p>
+</li>
+<li><p>对于内置类型来说，这两种形式就差别大了：</p>
+<ul>
+<li>值初始化的内置类型对象有着良好定义的值。</li>
+<li>默认初始化的对象的值则是未定义的。</li>
+</ul>
+</li>
+</ul>
+<h5 id="动态分配的const对象"><a href="#动态分配的const对象" class="headerlink" title="动态分配的const对象"></a>动态分配的const对象</h5><ul>
+<li><code>const int *p = new const int(1234);</code>一个动态分配的cosnt对象必须进行初始化。</li>
+<li><code>const string *p2 = new const string;</code>但是对于一个定义了默认构造函数的类类型，其const动态对象可以隐式初始化，而其他类型的对象就必须显示初始化。</li>
+<li>由于分配的对象是const的，new返回的指针是一个指向const的指针。</li>
+</ul>
+<h5 id="内存耗尽"><a href="#内存耗尽" class="headerlink" title="内存耗尽"></a>内存耗尽</h5><ul>
+<li>默认情况下，如果new不能分配所要求的内存空间，它会抛出一个类型为bad_alloc的异常。</li>
+<li>可以使用nothrow来阻止抛出异常：<code>int *p = new(nothrow)int;</code>如果分配失败，new返回一个空指针。</li>
+</ul>
+<h5 id="释放动态内存"><a href="#释放动态内存" class="headerlink" title="释放动态内存"></a>释放动态内存</h5><ul>
+<li><code>delete p;</code>p必须指向一个动态分配的对象或空指针。</li>
+<li>虽然一个const对象的值是不能被改变，但它本身是可以被销毁的。</li>
+</ul>
+<h5 id="动态内存的管理常见错误"><a href="#动态内存的管理常见错误" class="headerlink" title="动态内存的管理常见错误"></a>动态内存的管理常见错误</h5><ul>
+<li>忘记delete内存。</li>
+<li>使用已经释放掉的对象。</li>
+<li>同一块内存释放两次。</li>
+</ul>
+<h5 id="delete之后重置指针值"><a href="#delete之后重置指针值" class="headerlink" title="delete之后重置指针值"></a>delete之后重置指针值</h5><ul>
+<li>在delete之后，指针就变成了空悬指针，指向一块曾经保存过数据对象但现在已经无效的内存的指针。</li>
+<li>避免空悬指针是的方法：在指针即将离开其作用域之前释放掉它所关联的内存。</li>
+<li>如果需要保留指针，可以在delete之后将nullptr赋予指针，这样就清楚地指出指针不指向任何对象。</li>
+</ul>
+<h4 id="shared-ptr和new结合使用"><a href="#shared-ptr和new结合使用" class="headerlink" title="shared_ptr和new结合使用"></a>shared_ptr和new结合使用</h4><ul>
+<li><p>不能将一个内置指针隐式转换为一个智能指针，必须使用直接初始化形式来初始化一个智能指针：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; p1 = <span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">42</span>); <span class="comment">//错误：必须使用直接初始化</span></span><br><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">p2</span><span class="params">(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">42</span>))</span></span>; <span class="comment">//正确：使用了直接初始化</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同理，一个返回shared_ptr的函数不能在其返回语句中隐式转换一个普通指针：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">clone</span><span class="params">(<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>(p); <span class="comment">//错误：隐式转换为shared_ptr&lt;int&gt;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">clone1</span><span class="params">(<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt;(<span class="keyword">new</span> <span class="keyword">int</span>(p)); <span class="comment">//正确：显式的用int*创建shared_ptr&lt;int&gt;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="智能指针和异常"><a href="#智能指针和异常" class="headerlink" title="智能指针和异常"></a>智能指针和异常</h4><ul>
+<li><p>当函数因为发生异常未被捕获而退出时，由一个shared_ptr唯一指针指向的内存会被释放掉；而直接管理内存不会被释放，即便函数末尾有delete语句：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *ip = <span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">42</span>);</span><br><span class="line">    <span class="comment">//发生异常未被捕获</span></span><br><span class="line">    <span class="keyword">delete</span> ip; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上述代码所示，假设在new和delete之间发生异常，且异常未在f中被捕获，则内存永远不会释放；而智能指针会通过检查引用计数，当引用计数为0时就会自动释放内存。</p>
+</li>
+</ul>
+<h5 id="智能指针陷阱"><a href="#智能指针陷阱" class="headerlink" title="智能指针陷阱"></a>智能指针陷阱</h5><ul>
+<li>不使用相同的内置指针初始化或reset多个智能指针</li>
+<li>不delete get()返回的指针。</li>
+<li>不使用get()初始化或reset另一个智能指针。</li>
+<li>如果你使用get()返回的指针，记住最后一个对应的智能指针销毁后，你的指针就变为无效了。</li>
+<li>如果你使用智能指针管理的资源不是new分配的内存，记住传递给它一个删除器。</li>
+</ul>
+<h4 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h4><ul>
+<li><p>与shared_ptr不同的是，某个时刻只能有一个unique_ptr指向一个指定对象。</p>
+</li>
+<li><p>当unique_ptr被销毁时，它所指向的对象也被销毁。</p>
+</li>
+<li><p>初始化unique_ptr必须采用直接初始化形式。</p>
+</li>
+<li><p>unique_ptr不支持拷贝，也不支持赋值。</p>
+</li>
+<li><p>虽然不能拷贝和赋值，unique_ptr可以通过调用release或reset将指针的所有权从一个非const的unique_ptr转移给另一个unique_ptr：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">unique_ptr</span>&lt;<span class="built_in">string</span>&gt; <span class="title">p1</span><span class="params">(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"hello world!"</span>))</span></span>; <span class="comment">//直接初始化</span></span><br><span class="line"><span class="function"><span class="built_in">unique_ptr</span>&lt;<span class="built_in">string</span>&gt; <span class="title">p2</span><span class="params">(p1.<span class="built_in">release</span>())</span></span>; <span class="comment">//将所有权从p1（指向string hello world！）转移给p2</span></span><br><span class="line"><span class="function"><span class="built_in">unique_ptr</span>&lt;<span class="built_in">string</span>&gt; <span class="title">p3</span><span class="params">(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"nihao!"</span>))</span></span>; <span class="comment">//直接初始化</span></span><br><span class="line">p2.reset(p3.<span class="built_in">release</span>()); <span class="comment">// reset释放了p2原来指向的内存，</span></span><br><span class="line">						<span class="comment">// 将指向string nihao！的所有权从p3转移给p2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>unique_ptr的一些操作</p>
+<ul>
+<li>unique_ptr<T> u1; 空unique_ptr，可以指向类型为T的对象。u1会使用delete来释放它的指针；</li>
+<li>unique_ptr&lt;T, D&gt; u2; 同上空unique_ptr，u2会使用一个类型为D的可调用对象来释放它的指针。</li>
+<li>unique_ptr&lt;T, D&gt; u(d); 空unique_ptr，指向类型为T的对象，用类型为D的对象d来代替delete。</li>
+<li>u = nullptr; 释放u指向的对象，将u置为空。</li>
+<li>u.release(); u放弃对指针的控制权，返回指针，并将u置空。即，返回unique_ptr当前保存的指针并将其置空。</li>
+<li>u.reset(); 释放u指向的对象，并将u置空。</li>
+<li>u.reset(q); 释放u指向的对象，然后令u指向q这个内置指针对象。</li>
+<li>u.reset(nullptr);释放u指向的对象，并将u置空。</li>
+</ul>
+</li>
+<li><p>若用一个内置指针来保存release返回的指针，则需要手动释放内存，即delete。</p>
+</li>
+</ul>
+<h5 id="传递unique-ptr参数和返回unique-ptr"><a href="#传递unique-ptr参数和返回unique-ptr" class="headerlink" title="传递unique_ptr参数和返回unique_ptr"></a>传递unique_ptr参数和返回unique_ptr</h5><ul>
+<li><p>不能拷贝unique_ptr的规则有一个例外：可以拷贝或赋值一个将要被销毁的unique_ptr：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">clone</span><span class="params">(<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt;(<span class="keyword">new</span> <span class="keyword">int</span>(p)); <span class="comment">//从int*创建一个unique_ptr&lt;int&gt;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 还可以返回一个局部对象的拷贝</span></span><br><span class="line"><span class="function"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">clone1</span><span class="params">(<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ret</span><span class="params">(<span class="keyword">new</span> <span class="keyword">int</span>(p))</span></span>;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h4><ul>
+<li>是一种不控制所指向对象生存期的智能指针，它指向由一个shared_ptr管理的对象。<ul>
+<li>weak_ptr<T>  w ; 空weak_ptr可以指向类型为T的对象</li>
+<li>weak_ptr<T>  w(sp); 与shared_ptr sp指向相同对象的weak_ptr，T必须能转换为sp指向的类型。</li>
+<li>w = p; p可以是一个shared_ptr或weak_ptr。赋值后w与p共享对象。</li>
+<li>w.reset(); 将w置为空</li>
+<li>w.use_count(); 与w共享对象的shared_ptr的数量。</li>
+<li>w.expired(); 若use_count()为0，返回true，否则返回false</li>
+<li>w.lock();如果expired为true，返回一个空shared_ptr；否则返回一个指向w的对象的shared_ptr。 </li>
+</ul>
+</li>
+<li>weak_ptr绑定到一个shared_ptr不会改变shared_ptr的引用计数，所以当最后一个指向对象的shared_ptr被销毁，对象就会被释放，即使有weak_ptr指向对象。</li>
+<li>由于对象可能不存在，所以不能直接使用weak_ptr访问对象，而必须调用lock：此函数检查weak_ptr指向的对象是否存在，如果存在就返回一个指向共享对象的shared_ptr；不存在的话就返回一个空shared_ptr。</li>
+</ul>
+<h3 id="动态数组"><a href="#动态数组" class="headerlink" title="动态数组"></a>动态数组</h3><h4 id="new和数组"><a href="#new和数组" class="headerlink" title="new和数组"></a>new和数组</h4><ul>
+<li><p>用new分配一个对象数组，需要在类型名之后跟一对方括号，在其中指明要分配的对象的数目。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *pia = <span class="keyword">new</span> <span class="keyword">int</span>[get_size()]; <span class="comment">// get_size()返回要分配int的个数，这里用整数也可以的</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分配一个数组会得到一个元素类型的指针：当有那个new T[]分配一个数组时，并未得到一个数组类型的对象，而是得到一个数组元素类型的指针。</p>
+</li>
+<li><p>因为分配的内存不是一个数组类型，因此不能对动态数组调用begin和end。也不能使用范围for循环。</p>
+</li>
+</ul>
+<h5 id="动态分配一个空数组是合法的"><a href="#动态分配一个空数组是合法的" class="headerlink" title="动态分配一个空数组是合法的"></a>动态分配一个空数组是合法的</h5><ul>
+<li><p>虽然不能创建一个大小为0的静态数组对象，但当n等于0时，调用new[n]是合法的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> arr[<span class="number">0</span>];  <span class="comment">//错误：不能定义长度为0的数组</span></span><br><span class="line"><span class="keyword">char</span> *p = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">0</span>]; <span class="comment">// 合法：但p不能被解引用</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>new返回一个合法的非空指针。</p>
+</li>
+</ul>
+<h5 id="释放动态数组"><a href="#释放动态数组" class="headerlink" title="释放动态数组"></a>释放动态数组</h5><ul>
+<li>为了释放动态数组，可以使用delete，并在指针前加上一个空方括号[]：<code>delete []p;</code></li>
+<li>数组中元素按逆序销毁。</li>
+<li>当释放一个指向数组的指针时，空方括号是必需的。</li>
+</ul>
+<h5 id="智能指针和动态数组"><a href="#智能指针和动态数组" class="headerlink" title="智能指针和动态数组"></a>智能指针和动态数组</h5><ul>
+<li><p>标准库提供了可以管理new分配的数组的unique_ptr版本。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unique_ptr&lt;int[]&gt; up(new int[10]);</span><br><span class="line">up.<span class="built_in">release</span>();<span class="comment">//自动调用delete[]销毁其指针</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当一个unique_ptr指向一个数组时，可以使用下标运算符来访问数组中的元素。</p>
+</li>
+<li><p>指向数组的unique_ptr不支持成员访问运算符。</p>
+</li>
+</ul>
+<h4 id="allocator类"><a href="#allocator类" class="headerlink" title="allocator类"></a>allocator类</h4><ul>
+<li><p>定义在memory中，帮助我们将内存分配和对象构造分离开来。</p>
+</li>
+<li><p>它分配的内粗是原始的、未构造的。可以按需在此内存中构造对象。</p>
+</li>
+<li><p>construct成员函数接受一个指针和零个或多个额外参数，在给定的位置构造一个元素。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">allocator&lt;<span class="built_in">string</span>&gt; alloc; <span class="comment">//可以分配string的allocator对象</span></span><br><span class="line"><span class="keyword">auto</span> <span class="keyword">const</span> p = alloc.allocate(n); <span class="comment">//分配n个未初始化的string</span></span><br><span class="line"><span class="keyword">auto</span> q = p; <span class="comment">// q指向最后构造的元素之后的位置</span></span><br><span class="line">alloc.construct(q++); <span class="comment">//*q为空字符串</span></span><br><span class="line">alloc.construct(q++, <span class="number">10</span>, <span class="string">'c'</span>); <span class="comment">// *q为cccccccccc</span></span><br><span class="line">alloc.construct(q++, <span class="string">"hi"</span>); <span class="comment">//*q为hi</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>还未构造对象的情况下使用原始内存是错误的。</p>
+</li>
+<li><p>只能对真正构造了的元素进行destroy操作：<code>a.destroy(p);</code>表示对p指向的对象执行析构函数，这里p为*T类型的指针。</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Donate
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2018/05/09/C-Primer-Chapter12/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2018/05/21/C-Primer-Chapter13/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            C++Primer--Chapter13
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2018/04/25/C-Primer-Chapter11/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">C++Primer--Chapter11</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2020
+        <i class="ri-heart-fill heart_icon"></i> Panta Sun
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+    <script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/16/2020 02:29:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "爱敏宝儿已经 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+    setInterval("createtime()",250);
+    </script>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.jpg" alt="Panta&#39; Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝肥宅快乐水吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

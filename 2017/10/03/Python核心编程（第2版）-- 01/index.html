@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    Python核心编程（第2版）-- 01 |  Panta&#39; Blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/images/bitbug_favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Python核心编程（第2版）-- 01"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Python核心编程（第2版）-- 01
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2017/10/03/Python%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%EF%BC%88%E7%AC%AC2%E7%89%88%EF%BC%89--%2001/" class="article-date">
+  <time datetime="2017-10-03T09:17:00.000Z" itemprop="datePublished">2017-10-03</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Reading-notes/">Reading notes</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.6k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">10 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p><strong>此系列是记录在阅读《Python核心编程（第2版）》时遇到的一些自己以前了解不够深刻或完全不了解的知识点</strong></p>
+<h2 id="第5章-数字"><a href="#第5章-数字" class="headerlink" title="第5章 数字"></a>第5章 数字</h2><h3 id="关于更新数字对象："><a href="#关于更新数字对象：" class="headerlink" title="关于更新数字对象："></a>关于更新数字对象：</h3><p>通过给数字对象（重新）赋值，就可以“更新”一个数值对象。这里为什么要给更新这两个字加上引号呢， 实际上你并没有更新该对象的原始数值。这是因为数值对象是不可改变对象。Python 的对象模型与常规对象模型有些不同。我们所认为的更新实际上是生成了一个新的数值对象，并得到它的引用。在学习编程的过程中， 我们一直接受这样的教育， 变量就像一个盒子， 里面装着变量的值。而在 Python 中，变量更像一个指针指向装变量值的盒子。对不可改变类型来说， 你无法改变盒子的内容， 但你可以将指针指向一个新盒子。每次将另外的数字赋给变量的时候，实际上创建了一个新的对象并把它赋给变量。(不仅仅是数字，对于所有的不可变类型，都是这么回事)</p>
+<a id="more"></a>
+<h3 id="关于删除数字对象："><a href="#关于删除数字对象：" class="headerlink" title="关于删除数字对象："></a>关于删除数字对象：</h3><p>按照 Python 的法则， 我们也无法真正删除一个数值对象，实际上我们仅仅是不再使用它而已。如果我们真的想删除一个数值对象的引用，就要使用 <code>del</code> 语句。删除对象的引用之后，我们就不能再使用这个引用(变量名)，除非给它赋一个新的值。如果试图使用一个已经被删除的对象引用，会引发 <code>NameError</code> 异常。</p>
+<h2 id="第6章-序列：字符串、列表、元组"><a href="#第6章-序列：字符串、列表、元组" class="headerlink" title="第6章 序列：字符串、列表、元组"></a>第6章 序列：字符串、列表、元组</h2><h3 id="序列："><a href="#序列：" class="headerlink" title="序列："></a>序列：</h3><p>有着相同访问模式的类型。其每一个元素可以通过指定一个偏移量来得到。</p>
+<h3 id="序列类型操作符："><a href="#序列类型操作符：" class="headerlink" title="序列类型操作符："></a>序列类型操作符：</h3><p>假设用sequence表示一个序列</p>
+<ul>
+<li><code>obj [not] in sequence</code>：判断某个元素是否在序列中</li>
+<li><code>sequence[ind]</code>：从序列中获得下标为ind的元素</li>
+<li><code>sequence[ind1:ind2]</code>：获得下标从ind1到ind2间的元素（不包括ind2）</li>
+<li><code>sequence * ind</code>：序列重复ind次</li>
+<li><code>sequence1 + sequence2</code>：连接序列sequence1和sequence2</li>
+</ul>
+<h3 id="拷贝对象："><a href="#拷贝对象：" class="headerlink" title="拷贝对象："></a>拷贝对象：</h3><h4 id="浅拷贝："><a href="#浅拷贝：" class="headerlink" title="浅拷贝："></a>浅拷贝：</h4><p>对一个对象进行浅拷贝，就是建立与一个类型跟原对象一样，但内容其实是原对象元素的引用。换句话说，这个拷贝的对象是新的，但它的内容不是新的，用 <code>copy.copy()</code>方法</p>
+<h4 id="深拷贝："><a href="#深拷贝：" class="headerlink" title="深拷贝："></a>深拷贝：</h4><p>需要用 <code>copy.deepcopy()</code>方法</p>
+<h4 id="理解："><a href="#理解：" class="headerlink" title="理解："></a>理解：</h4><p>大体上讲，Python里的赋值符号“=”只是将对象进行了引用，如果想新开辟地址new出一个新对象，要用copy模块的<code>copy.copy()</code>，但是用这个方法得到的对象是新对象，但是数据还是引用。如果要完全得到一个新的一模一样的对象，要用<code>copy.deepcopy()</code>方法。这样，在改变新对象的时候，原对象才能不受影响，也就是保持原始数据不变。例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> copy    </span><br><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="string">'a'</span>, <span class="string">'b'</span>]] <span class="comment">#原始对象    </span></span><br><span class="line">	    </span><br><span class="line">b = a <span class="comment">#赋值，传对象的引用    </span></span><br><span class="line">c = copy.copy(a) <span class="comment">#对象拷贝，浅拷贝    </span></span><br><span class="line">d = copy.deepcopy(a) <span class="comment">#对象拷贝，深拷贝    </span></span><br><span class="line">     </span><br><span class="line">a.append(<span class="number">5</span>) <span class="comment">#修改对象a    </span></span><br><span class="line">a[<span class="number">4</span>].append(<span class="string">'c'</span>) <span class="comment">#修改对象a中的['a', 'b']数组对象    </span></span><br><span class="line">	     </span><br><span class="line"><span class="keyword">print</span> <span class="string">'a = '</span>, a    </span><br><span class="line"><span class="keyword">print</span> <span class="string">'b = '</span>, b    </span><br><span class="line"><span class="keyword">print</span> <span class="string">'c = '</span>, c    </span><br><span class="line"><span class="keyword">print</span> <span class="string">'d = '</span>, d</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>], <span class="number">5</span>] </span><br><span class="line">b = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>], <span class="number">5</span>] </span><br><span class="line">c = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]] </span><br><span class="line">d = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="string">'a'</span>, <span class="string">'b'</span>]]</span><br></pre></td></tr></table></figure>
+
+<p><strong>注：对于非容器类型（如数字、字符串、和其他’原子’类型的对象）没有被拷贝一说。</strong></p>
+<h3 id="Unicode使用注意事项（Python2-7）："><a href="#Unicode使用注意事项（Python2-7）：" class="headerlink" title="Unicode使用注意事项（Python2.7）："></a>Unicode使用注意事项（Python2.7）：</h3><p>遵守以下的规则，处理 Unicode 就会变得简单:</p>
+<ul>
+<li>程序中出现字符串时一定要加个前缀 u.</li>
+<li>不要用 <code>str()</code>函数，用 <code>unicode()</code>代替.</li>
+<li>不要用过时的 <code>string</code> 模块 – 如果传给它的是非 ASCII 字符，它会把一切搞砸。</li>
+<li>不到必须时不要在你的程序里面编解码 Unicode 字符.只在你要写入文件或数据库或者网络时，才调用 <code>encode()</code>函数;相应地，只在你需要把数据读回来的时候才调用 <code>decode()</code>函数.</li>
+</ul>
+<h3 id="内建函数"><a href="#内建函数" class="headerlink" title="内建函数"></a>内建函数</h3><h4 id="序列内建函数"><a href="#序列内建函数" class="headerlink" title="序列内建函数"></a>序列内建函数</h4><p><code>enumerate(iter)</code>：接受一个可迭代对象作为参数，返回一个 enumerate 对象(也是一个迭代器),该对象生成由 iter 每个元素的 index 值和 item 值组成的元组。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iter = <span class="string">"asdasdkj"</span></span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> enumerate(iter):</span><br><span class="line">    <span class="keyword">print</span> s</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">C:\Python27\python.exe E:/PythonCodes/PythonCore/basic/test_enumerate.py</span><br><span class="line">(<span class="number">0</span>, <span class="string">'a'</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'s'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'d'</span>)</span><br><span class="line">(<span class="number">3</span>, <span class="string">'a'</span>)</span><br><span class="line">(<span class="number">4</span>, <span class="string">'s'</span>)</span><br><span class="line">(<span class="number">5</span>, <span class="string">'d'</span>)</span><br><span class="line">(<span class="number">6</span>, <span class="string">'k'</span>)</span><br><span class="line">(<span class="number">7</span>, <span class="string">'j'</span>)</span><br><span class="line">Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p><code>zip([it0, it1,... itN])</code>： 返回一个列表，该列表的第一个值是 it0，it1,…元素中的第一个元素组成的一个元组，第二个…,类推。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">it0 = [<span class="string">'sd'</span>, <span class="string">'1'</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">it1 = [<span class="string">'e'</span>, <span class="string">'f'</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>]</span><br><span class="line">it2 = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line"><span class="keyword">print</span> zip(it0, it1, it2)</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Python27\python.exe E:/PythonCodes/PythonCore/basic/test_enumerate.py</span><br><span class="line">[(<span class="string">'sd'</span>, <span class="string">'e'</span>, <span class="string">'a'</span>), (<span class="string">'1'</span>, <span class="string">'f'</span>, <span class="string">'b'</span>), (<span class="number">2</span>, <span class="number">8</span>, <span class="number">5</span>), (<span class="number">3</span>, <span class="number">9</span>, <span class="number">6</span>), (<span class="number">4</span>, <span class="number">10</span>, <span class="number">7</span>), (<span class="number">5</span>, <span class="number">11</span>, <span class="number">8</span>)]</span><br><span class="line">Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p><code>ord()</code>、<code>chr()</code>和<code>unichr()</code><br><code>ord()</code>函数接收一个字符(长度为 1 的字符串)或Unicode字符作为参数,返回对应的 ASCII 数值。如果所给的 Unicode 字符超出了你的 Python 定义范围，则会引发一个 <code>TypeError</code> 的异常。<br><code>chr()</code>函数用一个范围在 range(256)内的(就是 0 到 255)整数做参数,返回一个对应的字符 。<br><code>unichr()</code>和<code>chr()</code>一样，  只不过返回的是 Unicode 字符。         </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> chr(<span class="number">65</span>)</span><br><span class="line"><span class="keyword">print</span> ord(<span class="string">"A"</span>)</span><br><span class="line"><span class="keyword">print</span> unichr(<span class="number">65</span>)</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Python27\python.exe E:/PythonCodes/PythonCore/basic/test_enumerate.py</span><br><span class="line">A</span><br><span class="line"><span class="number">65</span></span><br><span class="line">A</span><br><span class="line">Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="字符串内建函数"><a href="#字符串内建函数" class="headerlink" title="字符串内建函数"></a>字符串内建函数</h4><p><code>string.capitalize()</code>：把字符串的第一个字符大写。</p>
+<p><code>string.center(width)</code>： 返回一个原字符串居中,并使用空格填充至长度 <code>width</code> 的新字符串。</p>
+<p><code>string.count(str, beg=0,end=len(string))</code>：返回 <code>str</code> 在 <code>string</code> 里面出现的次数，如果 <code>beg</code> 或者 <code>end</code> 指定则，返回指定范围内 <code>str</code> 出现的次数。</p>
+<p><code>string.decode(encoding=&#39;UTF-8&#39;,errors=&#39;strict&#39;)</code>： 以 <code>encoding</code> 指定的编码格式解码 <code>string</code>，如果出错默认报一个 <code>ValueError</code> 的异常，除非 <code>errors</code> 指定的是<code>&#39;ignore&#39;</code>或者<code>&#39;replace&#39;</code>。</p>
+<p><code>string.encode(encoding=&#39;UTF-8&#39;,errors=&#39;strict&#39;)</code>：以 <code>encoding</code> 指定的编码格式编码 <code>string</code>，如果出错默认报一个 <code>ValueError</code> 的异常，除非 <code>errors</code> 指定的是<code>&#39;ignore&#39;</code>或者<code>&#39;replace&#39;</code>。</p>
+<p><code>string.endswith(obj, beg=0,end=len(string))</code>：检查字符串是否以 obj 结束，如果 beg 或者 end 指定则检查指定的范围内是否以 obj 结束，如果是，返回 <code>True</code>,否则返回 <code>False</code>。</p>
+<p><code>string.expandtabs(tabsize=8)</code>：把字符串 <code>string</code> 中的 <code>tab</code> 符号转为空格，格数 <code>tabsize</code> 是 <code>8</code>。</p>
+<p><code>string.find(str, beg=0,end=len(string))</code>：检测 <code>str</code> 是否包含在 <code>string</code> 中，如果 <code>beg</code> 和 <code>end</code> 指定范围，则检查是否包含在指定范围内，如果是返回开始的索引值，否则返回<code>-1</code>。</p>
+<p><code>string.index(str, beg=0,end=len(string))</code>：跟<code>find()</code>方法一样，只不过如果 <code>str</code> 不在 <code>string</code>中会报一个异常。<br><code>string.isalnum()</code>：如果 <code>string</code> 至少有一个字符并且所有字符都是字母或数字则返回 <code>True</code>,否则返回 <code>False</code>。<br><code>string.isalpha()</code>：如果 <code>string</code> 至少有一个字符并且所有字符都是字母则返回 <code>True</code>,否则返回 <code>False</code>。</p>
+<p><code>string.isdecimal()</code>：如果 <code>string</code> 只包含十进制数字则返回 <code>True</code> 否则返回 <code>False</code>。</p>
+<p><code>string.isdigit()</code>：如果 <code>string</code> 只包含数字则返回 <code>True</code> 否则返回 <code>False</code>。</p>
+<p><code>string.islower()</code>：如果 <code>string</code> 中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是小写，则返回 <code>True</code>，否则返回 <code>False</code> 。<br>​<br><code>string.isnumeric()</code>：如果 <code>string</code> 中只包含数字字符，则返回 <code>True</code>，否则返回 <code>False</code>。</p>
+<p><code>string.isspace()</code>：如果 <code>string</code> 中只包含空格，则返回 <code>True</code>，否则返回 <code>False</code>。</p>
+<p><code>string.istitle()</code>：如果 <code>string</code> 是标题化的(见 <code>title()</code>)则返回 <code>True</code>，否则返回 <code>False</code>。</p>
+<p><code>string.isupper()</code>：如果 <code>string</code> 中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是大写，则返回 <code>True</code>，否则返回 <code>False</code>。</p>
+<p><code>string.join(seq)</code>：Merges (concatenates)以 <code>string</code> 作为分隔符，将 <code>seq</code> 中所有的元素(的字符串表示)合并为一个新的字符串。</p>
+<p><code>string.ljust(width)</code>：返回一个原字符串左对齐,并使用空格填充至长度 <code>width</code> 的新字符串。</p>
+<p><code>string.lower()</code>：转换 <code>string</code> 中所有大写字符为小写。</p>
+<p><code>string.lstrip()</code>：截掉 <code>string</code> 左边的空格。</p>
+<p><code>string.partition(str)</code>：有点像 <code>find()</code>和 <code>split()</code>的结合体,从 <code>str</code> 出现的第一个位置起,把字符串 <code>string</code> 分 成 一 个 3 元 素 的 元 组<code>(string_pre_str,str,string_post_str)</code>,如果 <code>string</code> 中不包含 <code>str</code> 则<code>string_pre_str == string</code>。</p>
+<p><code>string.replace(str1, str2,num=string.count(str1))</code>把 <code>string</code> 中的 <code>str1</code> 替换成 <code>str2</code>,如果 <code>num</code> 指定，则替换不超过 <code>num</code> 次。</p>
+<p><code>string.rfind(str, beg=0,end=len(string))</code>：类似于 <code>find()</code>函数，不过是从右边开始查找。</p>
+<p><code>string.rindex( str, beg=0,end=len(string))</code>：类似于 <code>index()</code>，不过是从右边开始。</p>
+<p><code>string.rjust(width)</code>：返回一个原字符串右对齐,并使用空格填充至长度 <code>width</code> 的新字符串。</p>
+<p><code>string.rpartition(str)</code>：类似于 partition()函数,不过是从右边开始查找。</p>
+<p><code>string.rstrip()</code> ：删除 <code>string</code> 字符串末尾的空格。</p>
+<p><code>string.split(str=&quot;&quot;, num=string.count(str))</code>：以 <code>str</code> 为分隔符切片 <code>string</code>，如果 <code>num</code> 有指定值，则仅分隔 <code>num</code> 个子字符串。</p>
+<p><code>string.splitlines(num=string.count(&#39;\n&#39;))</code>：按照行分隔，返回一个包含各行作为元素的列表，如果 <code>num</code> 指定则仅切片 <code>num</code> 个行。</p>
+<p><code>string.startswith(obj, beg=0,end=len(string))</code>：检查字符串是否是以 <code>obj</code> 开头，是则返回 <code>True</code>，否则返回 <code>False</code>。如果 <code>beg</code> 和 <code>end</code> 指定值，则在指定范围内检查。</p>
+<p><code>string.strip([obj])</code>：在 <code>string</code> 上执行 <code>lstrip()</code>和 <code>rstrip()</code>。</p>
+<p><code>string.swapcase()</code>：翻转 <code>string</code> 中的大小写。</p>
+<p><code>string.title()</code>：返回”标题化”的 <code>string</code>,就是说所有单词都是以大写开始，其余字母均为小写(见 <code>istitle()</code>)。</p>
+<p><code>string.translate(str, del=&quot;&quot;)</code>：根据 <code>str</code> 给出的表(包含256个字符)转换 <code>string</code> 的字符,要过滤掉的字符放到 <code>del</code> 参数中。</p>
+<p><code>string.upper()</code>：转换 <code>string</code> 中的小写字母为大写。</p>
+<p><code>string.zfill(width)</code>：返回长度为 <code>width</code> 的字符串，原字符串 <code>string</code> 右对齐，前面填充 <code>0</code>。</p>
+ 
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Donate
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2017/10/03/Python%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%EF%BC%88%E7%AC%AC2%E7%89%88%EF%BC%89--%2001/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2017/10/05/Python%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%EF%BC%88%E7%AC%AC2%E7%89%88%EF%BC%89--%2002/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Python核心编程（第2版）-- 02
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2017/10/01/Python%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%EF%BC%88%E7%AC%AC2%E7%89%88%EF%BC%89--%2000/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Python核心编程（第2版）-- 00</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2020
+        <i class="ri-heart-fill heart_icon"></i> Panta Sun
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+    <script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/16/2020 02:29:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "爱敏宝儿已经 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+    setInterval("createtime()",250);
+    </script>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.jpg" alt="Panta&#39; Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝肥宅快乐水吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    C++Primer--Chapter06 |  Panta&#39; Blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/images/bitbug_favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-C-Primer-Chapter06"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  C++Primer--Chapter06
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2018/01/30/C-Primer-Chapter06/" class="article-date">
+  <time datetime="2018-01-30T14:49:05.000Z" itemprop="datePublished">2018-01-30</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Reading-notes/">Reading notes</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">8 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="第六章-函数"><a href="#第六章-函数" class="headerlink" title="第六章 函数"></a>第六章 函数</h2><h3 id="函数基础"><a href="#函数基础" class="headerlink" title="函数基础"></a>函数基础</h3><ul>
+<li>名字的作用域是程序文本的一部分，名字在其中可见。</li>
+<li>对象的生命周期是程序执行过程中该对象存在的一段时间。</li>
+</ul>
+<h3 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h3><ul>
+<li><p><strong>传值参数：</strong>函数对形参所做的所有操作都不会影响实参。</p>
+</li>
+<li><p><strong>指针形参：</strong>当执行指针拷贝操作时，拷贝的是指针的值。拷贝之后，两个指针是不同的指针。</p>
+</li>
+<li><p><strong>传引用参数：</strong>对于引用的操作实际上是作用在引用所引的对象上。</p>
+</li>
+<li><p><strong>使用引用形参可以返回额外的值：</strong>因为一个函数只能返回一个值，如果想返回多个值可以在函数的形参中加一个引用，在函数中修改引用的值，这样在函数执行完之后，引用所引的值也会被改变，这样就得到了想要的额外值。</p>
+</li>
+<li><p><strong><code>const</code>：</strong><code>int * const p = &amp;i;</code> <code>const</code>是顶层的不能给<code>p</code>赋值，但可以通过<code>p</code>改变对象的内容:<code>*p = 0;</code>；<code>const int *p = &amp;i;</code>，这里的<code>p</code>不能改变<code>i</code> 。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i =<span class="number">18</span>;</span><br><span class="line"><span class="comment">// 正常运行</span></span><br><span class="line"><span class="comment">// 打印的结果是：1</span></span><br><span class="line"><span class="keyword">int</span> * <span class="keyword">const</span> pp = &amp;i;</span><br><span class="line">*pp = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 会报错:*p 是只读的，不能写。</span></span><br><span class="line"><span class="comment">// panta@panta-PC:~/Desktop$ g++ test.cpp </span></span><br><span class="line"><span class="comment">// test.cpp: In function ‘int main()’:</span></span><br><span class="line"><span class="comment">// test.cpp:19:7: error: assignment of read-only location ‘* p’</span></span><br><span class="line"><span class="comment">// *p = 0;</span></span><br><span class="line"><span class="comment">//      ^</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *p = &amp;i;</span><br><span class="line">*p = <span class="number">0</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​</p>
+</li>
+<li><p><strong>数组形参：</strong>当为函数传递一个数组时，实际上传递的是指向数组首元素的指针。可以把数组形参写成类似数组的形式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 三种等价的写法</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>*)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>[])</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>[<span class="number">10</span>])</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>管理指针形参有三种常用的技术：</strong></p>
+<ol>
+<li>使用标记指定数组的长度，就是判断指针是否是一个空指针，不是空指针再判断是否是指向空字符。一般用于C风格字符串存储的字符数组。</li>
+<li>使用标准库规范，即将指向数组首元素和尾后元素的指针传到函数中。</li>
+<li>显示的传递一个表示数组大小的形参。</li>
+</ol>
+</li>
+</ul>
+<h3 id="返回类型和return语句"><a href="#返回类型和return语句" class="headerlink" title="返回类型和return语句"></a>返回类型和return语句</h3><ul>
+<li><strong>值是如何被返回的：</strong>返回的值用于初始化调用点的一个临时量，该临时量是函数调用的结果。</li>
+<li><strong>不要返回局部对象的引用或指针：</strong>因为函数完成后，局部对象所占的存储空间也随之被释放，函数终止意味着局部变量的引用将指向不再有效的内存区域；同样指向局部对象的指针也将指向一个不存在的对象。</li>
+</ul>
+<h4 id="返回数组指针："><a href="#返回数组指针：" class="headerlink" title="返回数组指针："></a>返回数组指针：</h4><ul>
+<li>返回数组指针的函数形式如下: <code>Type (*function(parameter_list))[dimension]</code>，例如<code>int (*func(int i))[10];</code><ul>
+<li><code>func(int i)</code>：表示调用<code>func</code>函数时需要一个<code>int</code>类型的实参。</li>
+<li><code>(*func(int i))</code>：意味着可以对函数调用的结果解引用。</li>
+<li><code>(*func(int i))[10]</code>：解引用将得到一个大小为<code>10</code>的数组。</li>
+<li><code>int (*func(int i))[10]</code> ：表示数组中的元素是<code>int</code>类型的。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>使用尾置返回类型：</strong>在C++11新标准中有一种简化上述<code>func</code>声明的方法，即尾置返回类型。格式如下：<code>auto func(int i)-&gt;int(*)[10];</code>。将函数的返回类型放在了形参列表之后就可以清楚的看到函数返回的是一个指针，并且该指针指向了含有<code>10</code>个整数的数组。任何函数的定义都可以使用尾置返回。</li>
+</ul>
+<h3 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h3><ul>
+<li><p>如果同一作用域内的几个函数的名字相同但形参列表不同，就称之为重载（overload）。</p>
+</li>
+<li><p>当调用函数时，编译器会根据形参的类型来推断想要的是哪个函数。</p>
+</li>
+<li><p><code>main</code>函数不能重载。</p>
+</li>
+<li><p>如果只是返回类型不同，而其他要素都相同，这种声明是错误的。</p>
+</li>
+<li><p><strong>重载和<code>const</code>形参：</strong></p>
+<ul>
+<li>一个拥有顶层<code>const</code>的形参无法和另一个没有顶层<code>const</code>的形参区分开来：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下边的两个声明是重复分</span></span><br><span class="line"><span class="comment">// 编译报错：</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">test.cpp: In function ‘int loo(int)’:</span></span><br><span class="line"><span class="comment">test.cpp:29:5: error: redefinition of ‘int loo(int)’</span></span><br><span class="line"><span class="comment"> int loo(const int i)&#123;</span></span><br><span class="line"><span class="comment">     ^~~</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">loo</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">loo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i =<span class="number">18</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> j = <span class="number">20</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> a = loo(i);</span><br><span class="line">	<span class="keyword">int</span> b = loo(j);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">loo</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">loo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>但是如果形参是某种类型的引用或指针，则通过区分指向的对象是常量还是非常量对象可以实现函数重载：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> &amp;i)</span></span>;       <span class="comment">// 函数作用于i的引用</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;i)</span></span>; <span class="comment">// 新函数，作用于常量引用</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i =<span class="number">18</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> &amp;j = i;</span><br><span class="line">	<span class="keyword">int</span> a = foo(i);</span><br><span class="line">	<span class="keyword">int</span> b = foo(j);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> &amp;i)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;i)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="重载与作用域"><a href="#重载与作用域" class="headerlink" title="重载与作用域"></a>重载与作用域</h4><ul>
+<li><p>如果在内层作用于声明名字，它将隐藏外层作用域中声明的同名实体。在不同作用域中无法重载函数名：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">read</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">bool</span> <span class="built_in">read</span> = <span class="literal">false</span>; <span class="comment">// 新作用域：相当于将外面的read()函数屏蔽了</span></span><br><span class="line">  <span class="built_in">string</span> a = <span class="built_in">read</span>(); <span class="comment">// 错误，read是一个布尔值，而非函数。</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="特殊用途语言特性"><a href="#特殊用途语言特性" class="headerlink" title="特殊用途语言特性"></a>特殊用途语言特性</h3><h4 id="默认实参"><a href="#默认实参" class="headerlink" title="默认实参"></a>默认实参</h4><ul>
+<li>一旦某个形参被赋予了默认值，它后面的所有形参都必须有默认值。（所以默认实参一般放在参数列表末尾）</li>
+<li><strong>使用默认实参：</strong> 要想使用默认实参，只要在调用函数的时候省略该实参就可以了。函数调用时实参按其位置解析，默认实参负责填补函数缺少的尾部实参。</li>
+<li><strong>默认实参声明：</strong>在声明函数时，一般将其放在头文件中，并且一个函数只声明一次，但多次声明也是合法的。在给定的作用域中一个形参只能被赋予一次默认实参。可以通过多次声明给没有默认实参的形参赋值，但不能多次声明给已经有默认实参的形参再次赋予默认实参。</li>
+<li>局部变量不能作为默认实参。在声明函数外的变量可以作为默认实参。</li>
+</ul>
+<h4 id="内联函数和constexpr函数"><a href="#内联函数和constexpr函数" class="headerlink" title="内联函数和constexpr函数"></a>内联函数和<code>constexpr</code>函数</h4><ul>
+<li><p><strong>内联函数可以避免函数调用的开销</strong> 函数指定为内联函数通常就是将它在每个调用点上“内联地”展开。</p>
+</li>
+<li><p><strong>格式：</strong>在函数的返回类型前面加上关键字<code>inline</code>，就可以将该函数声明成内联函数了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">const</span> <span class="built_in">string</span> &amp;<span class="title">shorterString</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;s1, <span class="keyword">const</span> <span class="built_in">string</span> &amp;s2)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> s1.<span class="built_in">size</span>() &lt;= s2.<span class="built_in">size</span>() ? s1 : s2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">const</span> <span class="built_in">string</span> &amp;s1 = <span class="string">"helloworld!!"</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="built_in">string</span> &amp;s2 = <span class="string">"nihaoshijie!!"</span>;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; shorterString(s1, s2);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><code>constexpr</code></strong>函数：指能用于常量表达式的函数。定义<code>constexpr</code>函数要遵循几条约定：</p>
+<ul>
+<li>函数的返回类型及所有形参的类型都必须是字面值。</li>
+<li>函数体中必须有且有一条<code>return</code>语句。</li>
+<li><code>constexpr</code>函数体内也可以包含其他语句，只要这些语句在运行时不执行任何操作就行，例如空语句、类型别名和<code>using</code>语句。</li>
+</ul>
+</li>
+<li><p>内联函数和<code>constexpr</code>函数通常定义在头文件中。</p>
+</li>
+</ul>
+<h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3><ul>
+<li><p>函数指针指向的是函数而非对象。</p>
+</li>
+<li><p>函数的类型由它的返回类型和形参类型共同决定，与函数名无关。</p>
+</li>
+<li><p>要想声明一个指向函数的指针，只需要用函数指针替换函数名即可。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">lengthCompare</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;, <span class="keyword">const</span> <span class="built_in">string</span> &amp;)</span></span>;</span><br><span class="line"><span class="comment">// pf是一个指向函数的指针，该函数的参数是两个const string 的引用，返回值是bool类型</span></span><br><span class="line"><span class="keyword">bool</span> (*pf)(<span class="keyword">const</span> <span class="built_in">string</span> &amp;, <span class="keyword">const</span> <span class="built_in">string</span> &amp;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>使用函数指针</strong></p>
+<ul>
+<li>当把函数名作为一个值使用时，该函数自动地转换成指针：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pf = lengthCompare;  <span class="comment">// pf指向名为 lengthCompare 的函数</span></span><br><span class="line">pf = &amp;lengthCompare; <span class="comment">// 等价的赋值语句：取地址符是可选的</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>还可以直接使用指向函数的指针调用函数，可以不用提前解引用：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 三种等价方式</span></span><br><span class="line"><span class="keyword">bool</span> b1 = pf(<span class="string">"asd"</span>, <span class="string">"sdfsdf"</span>);</span><br><span class="line"><span class="keyword">bool</span> b2 = (*pf)(<span class="string">"asd"</span>, <span class="string">"sdfsdf"</span>);</span><br><span class="line"><span class="keyword">bool</span> b3 = lengthCompare(<span class="string">"asd"</span>, <span class="string">"sdfsdf"</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在指向不同函数类型的指针之间不存在转换。</li>
+<li>但可以给函数指针赋一个空指针或值为<code>0</code>的整型常量表达式。</li>
+</ul>
+</li>
+<li><p><strong>重载函数的指针：</strong>编译器通过指针类型决定选用哪个函数，指针类型必须与重载函数中的一个精确匹配。</p>
+</li>
+<li><p><strong>函数指针形参：</strong></p>
+<ul>
+<li>形参可以是函数指针。可以把函数直接当做实参使用，它会自动转换成指针。</li>
+</ul>
+</li>
+<li><p><code>auto</code>和<code>decltype</code>可以简化函数指针。</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Donate
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2018/01/30/C-Primer-Chapter06/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2018/03/06/MATLAB%E4%B8%80%E4%BA%9B%E5%87%BD%E6%95%B0%E5%8F%98%E5%8A%A8/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            MATLAB一些函数变动
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2018/01/29/C-Primer-Chapter05/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">C++Primer--Chapter05</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2020
+        <i class="ri-heart-fill heart_icon"></i> Panta Sun
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+    <script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/16/2020 02:29:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "爱敏宝儿已经 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+    setInterval("createtime()",250);
+    </script>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.jpg" alt="Panta&#39; Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝肥宅快乐水吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

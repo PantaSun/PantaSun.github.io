@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    C++Primer--Chapter09 |  Panta&#39; Blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/images/bitbug_favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-C-Primer-Chapter09"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  C++Primer--Chapter09
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2018/04/16/C-Primer-Chapter09/" class="article-date">
+  <time datetime="2018-04-16T05:55:47.000Z" itemprop="datePublished">2018-04-16</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Reading-notes/">Reading notes</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">3.9k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">14 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="第九章-顺序容器"><a href="#第九章-顺序容器" class="headerlink" title="第九章 顺序容器"></a>第九章 顺序容器</h2><ul>
+<li>一个容器就是一些特定类型对象的集合。</li>
+</ul>
+<h3 id="顺序容器概述"><a href="#顺序容器概述" class="headerlink" title="顺序容器概述"></a>顺序容器概述</h3><ul>
+<li>vector：可变大小数组。支持快速随机访问。在尾部之外的位置插入或删除元素可能很慢。</li>
+<li>deque：双端队列。支持快速随机访问。在头尾插入删除速度很快。</li>
+<li>list：双向链表。只支持双向顺序访问。在list中任何位置插入删除都很快。</li>
+<li>forward_list：单向链表。只支持单项顺序访问。在链表任何位置插入删除操作速度很快。</li>
+<li>string：与vector相似的容器，但专门用于保存字符。随机访问快。在尾部插入删除速度快。</li>
+<li>array：固定大小数组。支持快速随机访问。不能添加或删除元素。</li>
+</ul>
+<p>除了array，其他容器都提供高效灵活的内存管理。</p>
+<h4 id="一些选择容器的基本原则"><a href="#一些选择容器的基本原则" class="headerlink" title="一些选择容器的基本原则"></a>一些选择容器的基本原则</h4><ul>
+<li>除非有更好的理由选择其他容器，否则应使用vector</li>
+<li>如果程序有很多小的元素，且空间的额外开销很重要，则不要使用list或forward_list。</li>
+<li>如果程序要求随机访问元素，应使用vector或deque。</li>
+<li>如果程序要在容器的中间插入或删除元素，用list或forward_list。</li>
+<li>如果程序在头尾插入删除元素，但不会在中间位置进行插入或删除，使用deque。</li>
+</ul>
+<h3 id="容器概览"><a href="#容器概览" class="headerlink" title="容器概览"></a>容器概览</h3><ul>
+<li>capacity：表示容器的容量</li>
+<li>size：表示容器当前存放元素的个数 </li>
+</ul>
+<h4 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h4><ul>
+<li><p>迭代器范围：[begin, end)迭代器范围中的元素包含first所表示的元素以及从first开始至last（但不包含last）之间的所有元素。</p>
+</li>
+<li><p>使用左闭合范围蕴含的编程假定：若begin和end相等，则范围为空；若begin与end不等，则范围至少包含一个元素，且begin指向范围中的第一个元素。可以对begin递增若干次，使得begin==end。</p>
+</li>
+<li><p>函数编写练习</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 接受一对指向<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;的迭代器和一个<span class="keyword">int</span>值。</span><br><span class="line"># 在两个迭代器指定的范围内查找给定的值，返回一个<span class="keyword">bool</span>值来表示是否找到。</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">find_value</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;:: iterator beg, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;:: iterator en, <span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (beg != en) &#123;</span><br><span class="line">        <span class="keyword">if</span> (*beg++ == value) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    <span class="comment">// insert code here...</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello, World!\n"</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; a = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">11</span> ,<span class="number">3</span>, <span class="number">5</span> ,<span class="number">8</span>&#125;;</span><br><span class="line">    <span class="keyword">if</span>(find_value(a.<span class="built_in">begin</span>(), a.<span class="built_in">end</span>(), <span class="number">12</span>)) <span class="built_in">cout</span> &lt;&lt; <span class="string">"true"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">cout</span> &lt;&lt; <span class="string">"false"</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="容器定义和初始化"><a href="#容器定义和初始化" class="headerlink" title="容器定义和初始化"></a>容器定义和初始化</h4><ul>
+<li>几种定义和初始化<ul>
+<li>C c;        默认构造函数。若C是一个array，则c中元素按默认方式初始化；否则c为空。</li>
+<li>C c1(c2);  或 C c1=c2;   c1初始化为c2的拷贝。c1和c2必须相同容器类型，元素类型也要相同，对于array容器大小也要相同。</li>
+<li>C c{a, b, c…}; 或 C={a, b, c….}; c初始化为初始化列表中元素的拷贝。列表中元素类型必须与c中元素类型相同。对于array，列表中元素必须小于或等于array的大小。</li>
+<li>C c(begin, end); c初始化为迭代器begin和end指定范围中的元素的拷贝。范围中元素的类型必须与c中的元素类型相容（即可以转化），array不适用于这种方式。</li>
+<li>C seq(n);  seq包含n个元素，这些元素进行了值初始化。</li>
+<li>C seq(n, t); seq中包含n个初始化值为t的元素。</li>
+</ul>
+</li>
+<li>将一个容器初始化为另一个容器的拷贝：<ul>
+<li>可以直接拷贝整个容器：要求两个容器的类型及其元素类型必须匹配</li>
+<li>或（array除外）拷贝由一个迭代器对指定的元素范围：新容器和原容器中的元素类型也可以不同，只要能将要拷贝的元素转化为要转化的容器的元素类型即可。</li>
+</ul>
+</li>
+<li>列表初始化：除了array之外的容器类型，初始化列表还隐含地指定了容器的大小：容器将包含与初始值一样多的元素。</li>
+</ul>
+<h4 id="赋值和swap"><a href="#赋值和swap" class="headerlink" title="赋值和swap"></a>赋值和swap</h4><ul>
+<li><p>赋值运算符：左边和右边的运算对象要具有相同的类型。它将右边运算对象中的所有元素拷贝到左边运算对象中。</p>
+</li>
+<li><p>assign（仅顺序容器）：顺序容器（array除外）还定义了一个名为assign的成员，可以从一个不同但相容的类型赋值，或者从容器的一个子序列赋值。</p>
+</li>
+<li><p>由于旧元素会被替换，因此传递给assign的迭代器不能指向调用assign的容器。</p>
+</li>
+<li><p>assign的第二个版本是：接受一个整数和一个元素值。它用指定数目且具有相同给定值的元素替换容器中原油的元素：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">list</span>&lt;<span class="built_in">string</span>&gt; <span class="title">s1</span><span class="params">(<span class="number">1</span>)</span></span>; <span class="comment">//一个元素，为空string</span></span><br><span class="line">s1.assign(<span class="number">10</span>, <span class="string">"Nihao!"</span>); <span class="comment">//10个元素，每个都是"Nihao!"</span></span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line"><span class="comment">// s1.clear();</span></span><br><span class="line"><span class="comment">// s1.insert(s1.begin(), 10, "Nihao!");</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>swap操作交换两个相同类型容器的内容。</p>
+</li>
+<li><p>除了array外，swap不对任何元素进行拷贝、删除或插入操作，因此可以保证在常数时间内完成。</p>
+</li>
+<li><p>对string调用swap会导致迭代器、引用和指针失效。</p>
+</li>
+</ul>
+<h4 id="容器大小操作"><a href="#容器大小操作" class="headerlink" title="容器大小操作"></a>容器大小操作</h4><ul>
+<li>每个容器类型都有三个与大小相关的操作。<ul>
+<li>成员函数size：返回容器中元素的数目</li>
+<li>empty：当size为0时返回true，否则返回false</li>
+<li>max_size：返回一个大于或等于该类型容器所能容纳的最大元素数的值。</li>
+</ul>
+</li>
+</ul>
+<h4 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h4><ul>
+<li>关系运算符左右两边的运算对象必须是相同类型的容器。</li>
+<li>比较规则：<ul>
+<li>两个容器具有相同的大小且所有元素两两对应相等，则这两个容器相等。</li>
+<li>两个容器大小不等，但较小的容器中每个元素都等于较大容器中对应的元素，则较小容器小于较大容器。</li>
+<li>如果两个容器都不是另一个容器的前缀子序列，则它们的比较结果取决于第一个不相等的元素的比较结果。</li>
+</ul>
+</li>
+<li>只有当容器中元素类型也定义了相应的比较运算符时，才可以使用关系运算符比较两个容器。</li>
+</ul>
+<h3 id="顺序容器操作"><a href="#顺序容器操作" class="headerlink" title="顺序容器操作"></a>顺序容器操作</h3><h4 id="添加元素"><a href="#添加元素" class="headerlink" title="添加元素"></a>添加元素</h4><ul>
+<li>向容器添加元素的操作：<ul>
+<li>forward_list有自己专有版本的insert和emplace</li>
+<li>forwa_list不支持push_back和emplace_back</li>
+<li>vector 和string 不支持push_front 和 emplace_front</li>
+<li>c.push_back(t); c.emplace_back(args); 在c的尾部创建一个值为t或由args创建的元素，返回void</li>
+<li>c.push_front(t); c.emplace_front(args); 在c的头部创建一个值为t或由args创建的元素，返回void</li>
+<li>c.insert(p,t); c.emplace(p,args); 在迭代器p指向的元素之前创建一个值为t或由args创建的元素。返回指向新添加的元素的迭代器。</li>
+<li>c.insert(p, n, t); 在迭代器p指向的元素之前插入n个值为t的元素。返回指向新添加的第一个元素的迭代器；若n为0，则返回p。</li>
+<li>c.insert(p, b, e); 在迭代器p指向的元素之前插入迭代器b和e指定的范围内的元素。返回指向新添加的第一个元素的迭代器；若范围为空，则返回p。</li>
+<li>c.insert(p, il); il是一个花括号包围的元素值列表。将这些给定值插入到迭代器p指向的元素之前。返回指向新添加的第一个元素的迭代器。若列表为空，则返回p。</li>
+</ul>
+</li>
+<li>当用对象来初始化容器时，或将一个对象插入到容器中时，实际上放入到容器中的是对象值的一个拷贝，而不是对象本身。容器中的元素与提供值的对象之间没有任何关联。随后对容器中元素的任何改变都不会影响到原始对象。</li>
+<li>emplace操作：新标准引入的三个新成员<ul>
+<li>emplace不是将对象拷贝到容器中。</li>
+<li>当调用一个emplace成员函数时，则会将参数传递给元素类型的构造函数。</li>
+<li>emplace成员会使用这些参数在容器管理的内存空间中直接构造元素。</li>
+<li>传递给emplace函数的参数必须与元素类型的构造函数相匹配。</li>
+</ul>
+</li>
+</ul>
+<h4 id="访问元素"><a href="#访问元素" class="headerlink" title="访问元素"></a>访问元素</h4><ul>
+<li><p>包含array在内的每个顺序容器都有一个front成员函数，而除了forward_list之外的所有顺序容器都有一个back成员函数。这两个操作分别返回首元素和尾元素的引用。</p>
+</li>
+<li><p>获取容器c中首元素和尾元素的例子</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!c.empty())&#123; <span class="comment">//在解引用一个迭代器或调用front或back前要检查是否有元素</span></span><br><span class="line">    <span class="comment">// va1 和 va2 是c中第一个元素值的拷贝</span></span><br><span class="line">    <span class="keyword">auto</span> va1 = *c.<span class="built_in">begin</span>();</span><br><span class="line">    <span class="keyword">auto</span> va2 = c.front();</span><br><span class="line">    <span class="comment">// va3 和 va4 是c中最后一个元素值的拷贝</span></span><br><span class="line">    <span class="keyword">auto</span> last = c.<span class="built_in">end</span>();</span><br><span class="line">    <span class="keyword">auto</span> va3 = *(--last); <span class="comment">// 不能递减forward_list迭代器</span></span><br><span class="line">    <span class="keyword">auto</span> va4 = c.back();  <span class="comment">// forward_list不支持</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>at和下标只适用于string、vector、deque和array</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">c.at[n]; <span class="comment">//返回下标为n的元素的引用，n是一个无符号数，下标越界，则抛出out_of_range异常</span></span><br><span class="line">c[n];    <span class="comment">//返回下标为n的元素的引用，n是一个无符号数，若n&gt;c.size()，则函数未定义</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>访问成员函数返回的都是引用，若容器不是const的，则返回值是普通引用，可以用来修改元素值。</p>
+</li>
+</ul>
+<h4 id="删除元素"><a href="#删除元素" class="headerlink" title="删除元素"></a>删除元素</h4><ul>
+<li>删除操作<ul>
+<li>forward_list 有特殊版本的erase</li>
+<li>forward_list 不支持pop_back；vector和string不支持pop_front。</li>
+<li>c.pop_back(); 删除c中尾元素。若c为空，则函数行为未定义。返回void。 </li>
+<li>c.pop_front(); 删除c中首元素。若c为空，则函数行为未定义。返回void。 </li>
+<li>c.erase(p); 删除跌打器p所指的元素，返回一个指向被删除元素之后的迭代器，若p指向为元素，则返回尾后跌打器。若p是尾后迭代器，则函数行为未定义。</li>
+<li>c.erase(b, e); 删除迭代器b和e所指定范围内的元素。返回一个指向最后一个被删除元素之后元素的迭代器，若e本身是尾后迭代器，则函数函数也返回尾后迭代器。</li>
+<li>c.clear(); 删除c中的所有元素，返回void。</li>
+</ul>
+</li>
+</ul>
+<h4 id="特殊的forward-list"><a href="#特殊的forward-list" class="headerlink" title="特殊的forward_list"></a>特殊的forward_list</h4><ul>
+<li><p>因为forward_list 是单向链表，每个节点除了保存数据外只保存了指向其后继的指针。当我门要在把对象插入到某个元素前时，我们需要知道该元素前驱的链接，这显然是不可能的。综上所述，在forward_list中插入或删除是通过改变给定元素之后的元素来完成的。于是就有了：</p>
+<ul>
+<li>insert_after</li>
+<li>emplace_after</li>
+<li>erase_after</li>
+<li>before_begin：返回指向链表首元素之前不存在的元素的迭代器。此迭代器不能解引用。</li>
+</ul>
+</li>
+<li><p>练习：查找并删除forward_list<int>中的奇数元素。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;forward_list&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	forward_list&lt;<span class="keyword">int</span>&gt; fl = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">7</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>&#125;;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"befor delete: "</span>&lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> f:fl) &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; f &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">auto</span> prev = fl.before_begin();</span><br><span class="line">    <span class="keyword">auto</span> curr = fl.<span class="built_in">begin</span>();</span><br><span class="line">    <span class="keyword">while</span> (curr != fl.<span class="built_in">end</span>()) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((*curr % <span class="number">2</span>) == <span class="number">1</span>) &#123;</span><br><span class="line">            curr = fl.erase_after(prev);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            prev = curr++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"after delete:"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> ff:fl) &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; ff &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	输出结果：</span></span><br><span class="line"><span class="comment">	befor delete: </span></span><br><span class="line"><span class="comment">	1 2 3 4 7 4 5 5 6 7 8 9 </span></span><br><span class="line"><span class="comment">	after delete:</span></span><br><span class="line"><span class="comment">	2 4 4 6 8 </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="改变容器大小"><a href="#改变容器大小" class="headerlink" title="改变容器大小"></a>改变容器大小</h4><ul>
+<li>除了array，其他容器可以用resize来增大或缩小容器。</li>
+<li>如果resize缩小容器，则指向被删除元素的迭代器、引用和指针都会失效。</li>
+<li>对vector、string或deque进行resize可能导致迭代器、指针和引用失效。</li>
+</ul>
+<h3 id="vector对象是如何增长的"><a href="#vector对象是如何增长的" class="headerlink" title="vector对象是如何增长的"></a>vector对象是如何增长的</h3><ul>
+<li>当不得不获取新的内存空间时，vector和string的实现通常会分配比新的空间需求更大的内存空间。容器预留这些空间作为备用，可以保存更多的新元素。</li>
+<li>这样就不需要每次添加新元素都重新分配容器内存空间了。</li>
+<li>容器大小管理操作<ul>
+<li>c.shrink_to_fit(); 只适用于vector、string和deque。请求将capacity减少为与size相同大小。也就是将多余的内存空间退还，但是调用该函数只是一个请求，标准库不保证退还内存。</li>
+<li>c.capacity(); 只适用于vector和string 不重新分配内存的话，c可以保存多少元素</li>
+<li>c.reserve(n); 分配至少能容纳n个元素的内存空间。</li>
+</ul>
+</li>
+</ul>
+<h3 id="额外的string操作"><a href="#额外的string操作" class="headerlink" title="额外的string操作"></a>额外的string操作</h3><ul>
+<li>当从一个const char* 创建string 数组时，指针指向的数组必须以空字符结尾，拷贝操作遇到空字符时停止。</li>
+<li>s.substr(pos, n); 返回一个string，包含s中从pos开始的n个字符的拷贝。pos的默认值为0。n的默认值为s.size()-pos，即拷贝从pos开始的所有字符。</li>
+</ul>
+<h4 id="改变string的其他方法"><a href="#改变string的其他方法" class="headerlink" title="改变string的其他方法"></a>改变string的其他方法</h4><ul>
+<li><p>append：在string末尾进行插入的一种简写形式。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string s("C++ Primer"), s2 = s;</span><br><span class="line">s.insert(s.<span class="built_in">size</span>(), <span class="string">" 4th Ed."</span>);</span><br><span class="line">s2.append(<span class="string">" 4th Ed."</span>); <span class="comment">//这里s2的值与s等价</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>replace：是调用erase和insert的一种简写形式。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接上文</span></span><br><span class="line">s.erase(<span class="number">11</span>, <span class="number">3</span>);   <span class="comment">//这时 s=="C++ Primer Ed."</span></span><br><span class="line">s.insert(<span class="number">11</span>, <span class="string">"5th"</span>); <span class="comment">// 这时 s=="C++ Primer 5th Ed."</span></span><br><span class="line">s2.replace(<span class="number">11</span>, <span class="number">3</span>, <span class="string">"5th"</span>); <span class="comment">//s2==s， 这里的参数3是指从11开始删除3个字符</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="string搜索"><a href="#string搜索" class="headerlink" title="string搜索"></a>string搜索</h4><ul>
+<li>string搜索函数返回string::size_type值，该类型是一个unsigned类型。如果搜索失败，则返回string::npos的static成员。</li>
+<li>标准库将npos定义为一个 const string::size_type类型，并初始化为值-1。因为npos你一个unsigned类型，这就意味值npos等于任何string最大的可能大小。</li>
+<li>搜索是大小写敏感的。</li>
+<li></li>
+</ul>
+<h4 id="compare函数"><a href="#compare函数" class="headerlink" title="compare函数"></a>compare函数</h4><h4 id="数值转换"><a href="#数值转换" class="headerlink" title="数值转换"></a>数值转换</h4><ul>
+<li>to_string(i); 将整数i转换为字符表示形式</li>
+<li>将字符串s转换为数值：<ul>
+<li>stoi</li>
+<li>stol</li>
+<li>stoul</li>
+<li>stoll</li>
+<li>stoull</li>
+<li>stof</li>
+<li>stod</li>
+<li>stold</li>
+</ul>
+</li>
+</ul>
+<h3 id="容器适配器"><a href="#容器适配器" class="headerlink" title="容器适配器"></a>容器适配器</h3><ul>
+<li>除了顺序容器外，标准库还定义了三个顺序容器适配器：<ul>
+<li>stack：定义在stack头文件中</li>
+<li>queue</li>
+<li>priority_queue：和queue都定义在queue头文件中。</li>
+</ul>
+</li>
+<li>适配器是标准库中的一个通用概念。</li>
+<li>容器、迭代器和函数都有适配器。</li>
+</ul>
+<h4 id="定义一个适配器"><a href="#定义一个适配器" class="headerlink" title="定义一个适配器"></a>定义一个适配器</h4><ul>
+<li>每个适配器都定义两个构造函数：默认构造函数创建一个空对象，另一个构造函数接受一个容器的构造函数拷贝该容器来初始化适配器。</li>
+<li>可以在创建一个适配器时将一个命名的顺序容器作为第二个类型参数，来重载默认容器类型。</li>
+<li>适配器不能构造在array之上，因为所有适配器都要求容器具有添加和删除元素的能力。</li>
+<li>也不能用forward_list来构造适配器，因为所有适配器都要求容器具有添加、删除以及访问尾元素的能力。</li>
+<li>stack可以使用array和forward_list之外的任何容器类型来构造。</li>
+<li>queue适配器可以构造在list和deque之上，但不能基于vector构造。</li>
+<li>priority_queuek可以基于vector或deque，但不能基于list</li>
+</ul>
+<h4 id="栈适配器"><a href="#栈适配器" class="headerlink" title="栈适配器"></a>栈适配器</h4><ul>
+<li><p>栈默认基于deque实现，也可以基于list或vector实现</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stack</span>&lt;<span class="built_in">string</span>, vectot&lt;<span class="built_in">string</span>&gt;&gt; str_stk; <span class="comment">// 在vector上实现的空栈</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="队列适配器"><a href="#队列适配器" class="headerlink" title="队列适配器"></a>队列适配器</h4><ul>
+<li>queue默认基于deque实现</li>
+<li>priority_queue默认基于vector实现</li>
+</ul>
+ 
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Donate
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2018/04/16/C-Primer-Chapter09/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2018/04/20/C-Primer-Chapter10/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            C++Primer--Chapter10
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2018/04/09/C-Primer-Chapter08/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">C++Primer--Chapter08</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2020
+        <i class="ri-heart-fill heart_icon"></i> Panta Sun
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+    <script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/16/2020 02:29:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "爱敏宝儿已经 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+    setInterval("createtime()",250);
+    </script>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.jpg" alt="Panta&#39; Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝肥宅快乐水吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

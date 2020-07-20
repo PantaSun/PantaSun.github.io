@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    C++Primer--Chapter10 |  Panta&#39; Blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/images/bitbug_favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-C-Primer-Chapter10"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  C++Primer--Chapter10
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2018/04/20/C-Primer-Chapter10/" class="article-date">
+  <time datetime="2018-04-20T07:55:53.000Z" itemprop="datePublished">2018-04-20</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Reading-notes/">Reading notes</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">1.7k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">6 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="第十章-泛型算法"><a href="#第十章-泛型算法" class="headerlink" title="第十章 泛型算法"></a>第十章 泛型算法</h2><ul>
+<li>标准库定义了一组泛型算法，实现了一些经典算法的借口，因此也称他们为“算法”。</li>
+<li>大多数算法定义在头文件algorithm中，标准库还在头文件numeric中定义了一组泛型算法。</li>
+<li>一般情况下，这些算法不直接操作容器，而是遍历由两个迭代器指定的一个元素范围来进行操作。</li>
+<li>泛型算法永远不会改变底层容器的大小。虽然可能改变容器中保存的元素的值，也可能在容器内移动元素，但永远不会直接添加或删除元素。</li>
+</ul>
+<h3 id="初识泛型算法"><a href="#初识泛型算法" class="headerlink" title="初识泛型算法"></a>初识泛型算法</h3><ul>
+<li>向目的位置迭代器写入数据的算法假定目的位置足够大，能容纳要写入的元素。</li>
+</ul>
+<h4 id="介绍back-inserter（定义在头文件iterator中）"><a href="#介绍back-inserter（定义在头文件iterator中）" class="headerlink" title="介绍back_inserter（定义在头文件iterator中）"></a>介绍back_inserter（定义在头文件iterator中）</h4><ul>
+<li><p>一种保证算法有足够元素空间来容纳输出数据的方法是使用插入迭代器（insert iterator）</p>
+</li>
+<li><p>插入迭代器是一种向容器添加元素的迭代器。</p>
+</li>
+<li><p>back_inserter接受一个指向容器的引用，返回一个与该容器绑定的插入迭代器。当通过此迭代器赋值是，赋值运算符会调用push_back将一个具有给定值的元素添加到容器中：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec; <span class="comment">//空向量</span></span><br><span class="line"><span class="keyword">auto</span> it = back_inserter(vec); <span class="comment">//通过它赋值会将元素添加到vec中</span></span><br><span class="line">*it = <span class="number">42</span>; <span class="comment">//vec中现在有一个元素，值为42</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="定制操作"><a href="#定制操作" class="headerlink" title="定制操作"></a>定制操作</h3><h4 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h4><ul>
+<li><p>一个lambda表达式表示一个可调用的代码单元。</p>
+</li>
+<li><p>lambda具有一个返回类型、一个参数列表和一个函数体。与函数不同的是，lambda可能定义在函数内部。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[capture <span class="built_in">list</span>](paramter <span class="built_in">list</span>) -&gt; <span class="keyword">return</span> type &#123;function body&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中捕获列表（capture list）是一个lambda所在函数中定义的局部变量列表；return type、parameter list和function body 与任何普通函数一样。</p>
+</li>
+<li><p>可以忽略参数列表和返回类型，但必须用韵包含捕获列表和函数体。</p>
+</li>
+</ul>
+<h4 id="lambda捕获和返回"><a href="#lambda捕获和返回" class="headerlink" title="lambda捕获和返回"></a>lambda捕获和返回</h4><ul>
+<li>当向一个函数传递lambda时，同时定义了一个新类型和该类型的一个对象：传递的参数就是此编译器生成的类类型的未命名对象。</li>
+<li>当使用auto定义一个用lambda初始化的变量时，定义了一个从lambda生成的类型的对象。</li>
+</ul>
+<h5 id="捕获值"><a href="#捕获值" class="headerlink" title="捕获值"></a>捕获值</h5><ul>
+<li><p>引用捕获</p>
+<ul>
+<li>若采用引用捕获一个变量，就必须保证被引用对象在lambda执行的时候时存在的。</li>
+<li>lambda捕获的都是局部变量，这些变量在函数结束后就不复存在了。</li>
+</ul>
+</li>
+<li><p>隐式捕获</p>
+<ul>
+<li><p>可以在捕获列表中写一个&amp;或=。</p>
+</li>
+<li><p>&amp;告诉编译器采用引用捕获方式</p>
+</li>
+<li><p>=告诉编译器采用值捕获方式</p>
+</li>
+<li><p>也可以混合捕获</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// os隐式捕获，引用捕获方式；c显示捕获，值捕获方式。</span></span><br><span class="line">for_each(b, e, [&amp;, c](<span class="keyword">const</span> <span class="built_in">string</span> &amp;s)&#123;os &lt;&lt; s &lt;&lt; c;&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当使用混合捕获时，捕获列表第一个元素必须时一个&amp;或=。而且显示捕获的变量必须与隐式捕获不同的方式。即如果隐式是&amp;，则显示必须时值捕获方式；若隐式是=，则显示必须时引用捕获方式。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="可变lambda"><a href="#可变lambda" class="headerlink" title="可变lambda"></a>可变lambda</h5><ul>
+<li><p>默认情况下，对于一个值被拷贝的变量，lambda不会改变其值。如过希望改变一个被捕获的变量的值，就必须在参数列表首加上关键字mutable。因此可变lambda可以省略参数列表：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> v1 = <span class="number">42</span>; <span class="comment">//局部变量</span></span><br><span class="line">    <span class="comment">// f可以改变它所捕获的变量的值</span></span><br><span class="line">    <span class="keyword">auto</span> f = [v1]()<span class="keyword">mutable</span>&#123;<span class="keyword">return</span> ++vl;&#125;;</span><br><span class="line">    v1 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">auto</span> j = f(); <span class="comment">// j为43</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一个引用捕获的变量是否可以修改依赖于此引用指向的是一个const类型还是非const类型。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> v1 = <span class="number">42</span>;<span class="comment">//局部变量</span></span><br><span class="line">    <span class="comment">//v1 是一个非const变量的引用</span></span><br><span class="line">    <span class="comment">//可以通过f2中的引用来改变它</span></span><br><span class="line">    <span class="keyword">auto</span> f2 = [&amp;v1]&#123;<span class="keyword">return</span> ++v1;&#125;;</span><br><span class="line">    v1 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">auto</span> j = f2(); <span class="comment">// j为1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="指定lambda返回类型"><a href="#指定lambda返回类型" class="headerlink" title="指定lambda返回类型"></a>指定lambda返回类型</h5><ul>
+<li><p>默认情况下，如果一个lambda体包含return之外的任何语句，则编译器假定此lambda发挥void。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fun(b, e, [](<span class="keyword">int</span> i)&#123;<span class="keyword">if</span>(i&lt;<span class="number">0</span>) <span class="keyword">return</span> -i;<span class="keyword">else</span> <span class="keyword">return</span> i;&#125;); <span class="comment">//报错：不能推断lambda的返回类型。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>因此当需要为lambda定义返回类型时，必须使用尾置返回类型：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fun2(b, e, [](<span class="keyword">int</span> i)-&gt; <span class="keyword">int</span> &#123;<span class="keyword">if</span>(i &lt; <span class="number">0</span>) <span class="keyword">return</span> -i; <span class="keyword">else</span> <span class="keyword">return</span> i;&#125;);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="参数绑定"><a href="#参数绑定" class="headerlink" title="参数绑定"></a>参数绑定</h4><h5 id="标准库bind函数"><a href="#标准库bind函数" class="headerlink" title="标准库bind函数"></a>标准库bind函数</h5><ul>
+<li><p>定义在头文件functional中。可以将bind函数看作一个通用的函数适配器，它接受一个可调用对象，生成一个新的可调用对象来适应原对象的参数列表。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用bind的一般形式</span></span><br><span class="line"><span class="keyword">auto</span> newCallable = bind(callable, arg_list);</span><br></pre></td></tr></table></figure>
+
+<p>其中newCallable本身是一个可调用对象，arg_list是一个逗号分隔的参数列表，对应给定的callable的参数。即，当我们调用newCallable时，newCallable会调用callable，并传递给它arg_list中的函数。</p>
+</li>
+<li><p>arg_list中可能包含形如 _n的参数，这里的n是一个整数。这些参数是“占位符”，表示newCallable的参数，它们占据了传递给newCallable的参数的位置。例如：_1为newCallable的第一个参数，_2位第二个参数，以此类推。</p>
+</li>
+<li><p>举例</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 首先check_size()</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check_size</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> &amp;s, <span class="built_in">string</span>::size_type sz )</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> s.<span class="built_in">size</span>() &gt;= sz;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// check6是一个可调用对象，接受一个string类型的参数</span></span><br><span class="line"><span class="comment">// 并有此string和值6来调用check_size</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">check6</span><span class="params">()</span> </span>= bind(check_size, _1, <span class="number">6</span>);</span><br><span class="line"><span class="built_in">string</span> s = <span class="string">"hello"</span>;</span><br><span class="line"><span class="keyword">bool</span> b1 = check6(s); <span class="comment">// check6会调用check_size(s, 6)</span></span><br><span class="line"><span class="comment">//当传递到函数中时</span></span><br><span class="line">autp wc = find_if(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>(), bind(check_size, <span class="number">-1</span>, sz));</span><br><span class="line"><span class="comment">// 次bind调用生成一个可调用对象，将check_size的第二个参数绑定到了sz的值。当find_if对words中的</span></span><br><span class="line"><span class="comment">// string调用这个对象时，这些对象会调用check_size，将给定的string和sz传递给它。</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="使用placeholders名字"><a href="#使用placeholders名字" class="headerlink" title="使用placeholders名字"></a>使用placeholders名字</h5><ul>
+<li>_n都被定义在一个名为palceholders的命名空间中，而这个空间本身定义在std命名空间中。例如，_1对应的using声明为：<code>using std::placeholders::_1;</code>，为了方便起见可以使用：<code>using namespcae std::palceholders;</code>，这样就不用为每个占位符都进行声明了。</li>
+</ul>
+<h5 id="绑定引用参数"><a href="#绑定引用参数" class="headerlink" title="绑定引用参数"></a>绑定引用参数</h5><ul>
+<li><p>当希望传递给bind一个对象而又不拷贝它，就必须使用标准库ref函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for_each(words.<span class="built_in">begin</span>(), words.<span class="built_in">end</span>(), bind(<span class="built_in">print</span>, ref(os), _1, <span class="string">' '</span>));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数ref返回一个对象，包含给定的引用，此对象时可以拷贝的。标准库中还有个cref函数，生成一个保存const引用的类。ref和cref定义在functional头文件中。</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Donate
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2018/04/20/C-Primer-Chapter10/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2018/04/25/C-Primer-Chapter11/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            C++Primer--Chapter11
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2018/04/16/C-Primer-Chapter09/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">C++Primer--Chapter09</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2020
+        <i class="ri-heart-fill heart_icon"></i> Panta Sun
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+    <script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/16/2020 02:29:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "爱敏宝儿已经 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+    setInterval("createtime()",250);
+    </script>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.jpg" alt="Panta&#39; Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝肥宅快乐水吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

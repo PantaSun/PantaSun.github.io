@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    Python核心编程（第2版）-- 00 |  Panta&#39; Blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/images/bitbug_favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Python核心编程（第2版）-- 00"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Python核心编程（第2版）-- 00
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2017/10/01/Python%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%EF%BC%88%E7%AC%AC2%E7%89%88%EF%BC%89--%2000/" class="article-date">
+  <time datetime="2017-10-01T12:53:55.000Z" itemprop="datePublished">2017-10-01</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Reading-notes/">Reading notes</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">8 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p><strong>此系列是记录在阅读《Python核心编程（第2版）》时遇到的一些自己以前了解不够深刻或完全不了解的知识点</strong></p>
+<h2 id="第3章-Python基础"><a href="#第3章-Python基础" class="headerlink" title="第3章 Python基础"></a>第3章 Python基础</h2><h3 id="变量赋值："><a href="#变量赋值：" class="headerlink" title="变量赋值："></a>变量赋值：</h3><p>在Python语言中，赋值不是直接将一个值赋给变量；对象都是通过引用传递的。在赋值时，无论是一个新对象，还是一个已经存在的对象，都是将该对象的引用（而不是值）赋给变量。在C中赋值语句其实是被当成一个表达式，可以返回值；而在Python中，赋值语句不会返回值。类似下面的语句在Python中是非法的：</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">1</span></span><br><span class="line">y = (x = x + <span class="number">1</span>)</span><br><span class="line"><span class="keyword">print</span> y</span><br></pre></td></tr></table></figure>
+<p>报错：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\Python27\python.exe E:/PythonCodes/PythonCore/re/re00.py  </span><br><span class="line">    File <span class="string">"E:/PythonCodes/PythonCore/re/re00.py"</span>, line <span class="number">5</span>    </span><br><span class="line">    y = (x = x + <span class="number">1</span>)           </span><br><span class="line">        ^SyntaxError: invalid syntaxProcess finished <span class="keyword">with</span> exit code <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>但是在Python中链式赋值是允许的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">1</span></span><br><span class="line">y = x = x + <span class="number">1</span></span><br><span class="line"><span class="keyword">print</span> x, y</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Python27\python.exe E:/PythonCodes/PythonCore/re/re00.py</span><br><span class="line">    <span class="number">2</span> <span class="number">2</span></span><br><span class="line">    Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h3 id="内存管理："><a href="#内存管理：" class="headerlink" title="内存管理："></a>内存管理：</h3><h4 id="引用计数："><a href="#引用计数：" class="headerlink" title="引用计数："></a>引用计数：</h4><p>要保持追踪内存中的对象，Python 使用了引用计数这一简单技术。也就是说 Python 内部记录着所有使用中的对象各有多少引用。一个内部跟踪变量，称为一个引用计数器。至于每个对象各有多少个引用，简称引用计数。当对象被创建时，就创建了一个引用计数，当这个对象不再需要时，也就是说，这个对象的引用计数变为 0 时，它被垃圾回收。（严格来说这不是 100%正确，不过现阶段你可以就这么认为）</p>
+<h5 id="增加引用计数："><a href="#增加引用计数：" class="headerlink" title="增加引用计数："></a>增加引用计数：</h5><p>当对象被创建并（将其引用）赋值给变量时，该对象的引用计数就被设置为 1。当同一个对象（的引用）又被赋值给其它变量时，或作为参数传递给函数，方法或类实例时，或者被赋值为一个窗口对象的成员时，该对象的一个新的引用，或者称作别名，就被创建（则该对象的引用计数自动加 1）。请看以下声明：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">3.14</span></span><br><span class="line">y = x</span><br></pre></td></tr></table></figure>
+<p>语句<code>x=3.14</code>创建了一个浮点数对象并将其引用赋值给<code>x</code>。<code>x</code>是第一个引用，因此，该对象的引用计数被设置为 1。语句<code>y=x</code>创建了一个指向同一对象的别名<code>y</code>。事实上并没有为<code>y</code>创建一个新对象，而是该对象的引用计数增加了 1 次（变成了 2）。这是对象引用计数增加的方式之一。还有一些其它的方式也能增加对象的引用计数，比如该对象作为参数被函数调用或这个对象被加入到某个容器对象当中时。总之，对象的引用计数在对象被创建：<code>x = 3.14</code> 或另外的别名被创建<code>y = x</code> 或被作为参数传递给函数（新的本地引用）：<code>foobar(x)</code> 或成为容器对象的一个元素：<code>myList = [123, x, &#39;xyz&#39;]</code></p>
+<h5 id="减少引用计数："><a href="#减少引用计数：" class="headerlink" title="减少引用计数："></a>减少引用计数：</h5><p>当对象的引用被销毁时，引用计数会减小。最明显的例子就是当引用离开其作用范围时，这种情况最经常出现在函数运行结束时，所有局部变量都被自动销毁，对象的引用计数也就随之减少。当变量被赋值给另外一个对象时，原对象的引用计数也会自动减 1：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo = <span class="string">'xyz'</span></span><br><span class="line">bar = foo</span><br><span class="line">foo = <span class="number">123</span></span><br></pre></td></tr></table></figure>
+<p>当字符串对象 <code>&quot;xyz&quot;</code> 被创建并赋值给 <code>foo</code> 时，它的引用计数是 1。 当增加了一个别名 bar时，引用计数变成了 2。 不过当 <code>foo</code> 被重新赋值给整数对象 <code>123</code> 时，<code>xyz</code> 对象的引用计数自动减 1，又重新变成了 1.其它造成对象的引用计数减少的方式包括使用 <code>del</code> 语句删除一个变量，或者当一个对象被移出一个窗口对象时（或该容器对象本身的引用计数变成了 0 时）。</p>
+<p>** 总结一下，一个对象的引用计数在以下情况会减少：一个本地引用离开了其作用范围。比如 foobar()函数结束时。对象的别名被显式的销毁：<code>del y # or del x</code>对象的一个别名被赋值给其它的对象：<code>x = 123</code>对象被从一个窗口对象中移除：<code>myList.remove(x)</code>窗口对象本身被销毁：<br><code>del myList # or goes out-of-scope</code> **</p>
+<h3 id="垃圾回收："><a href="#垃圾回收：" class="headerlink" title="垃圾回收："></a>垃圾回收：</h3><p>不再被使用的内存会被一种称为垃圾收集的机制释放。如上面说的，虽然解释器跟踪对象的引用计数，但垃圾收集器负责释放内存。垃圾收集器是一块独立代码，它用来寻找引用计数为 0 的对象。它也负责检查那些虽然引用计数大于 0 但也应该被销毁的对象。特定情形会导致循环引用。一个循环引用发生在当你有至少两个对象互相引用时，也就是说所有的引用都消失时，这些引用仍然存在，这说明只靠引用计数是不够的。Python 的垃圾收集器实际上是一个引用计数器和一个循环垃圾收集器。 当一个对象的引用计数变为 0，解释器会暂停，释放掉这个对象和仅有这个对象可访问（可到达）的其它对象。作为引用计数的补充，垃圾收集器也会留心被分配的总量很大（及未通过引用计数销毁的那些）的对象。在这种情况下，解释器会暂停下来，试图清理所有未引用的循环。</p>
+<ul>
+<li>PS：垃圾回收机制还需要查询资料做更深一步理解 *</li>
+</ul>
+<h2 id="第4章-Python对象"><a href="#第4章-Python对象" class="headerlink" title="第4章 Python对象"></a>第4章 Python对象</h2><h3 id="所有Python对象都有三个属性：身份、类型和值"><a href="#所有Python对象都有三个属性：身份、类型和值" class="headerlink" title="所有Python对象都有三个属性：身份、类型和值"></a>所有Python对象都有三个属性：身份、类型和值</h3><h4 id="身份："><a href="#身份：" class="headerlink" title="身份："></a>身份：</h4><p>每一个对象都有一个唯一的身份标识自己，任何对象的身份可以使用内建函数 <code>id()</code>来得到。这个值可以被认为是该对象的内存地址。</p>
+<h4 id="类型："><a href="#类型：" class="headerlink" title="类型："></a>类型：</h4><p>对象的类型决定了该对象可以保存什么类型的值，可以进行什么样的操作，以及遵循什么样的规则。可以用内建函数 <code>type()</code> 查看 Python 对象的类型。因为在 Python 中类型也是对象，所以 <code>type()</code> 返回的是对象而不是简单的字符串。</p>
+<h4 id="值："><a href="#值：" class="headerlink" title="值："></a>值：</h4><p>对象表示的数据项。</p>
+<h3 id="类型更新"><a href="#类型更新" class="headerlink" title="类型更新:"></a>类型更新:</h3><h4 id="不可更改的类型"><a href="#不可更改的类型" class="headerlink" title="不可更改的类型"></a>不可更改的类型</h4><p>数字、字符串、元组          </p>
+<h4 id="可更改的类型："><a href="#可更改的类型：" class="headerlink" title="可更改的类型："></a>可更改的类型：</h4><p>列表、字典</p>
+<h3 id="类型访问"><a href="#类型访问" class="headerlink" title="类型访问:"></a>类型访问:</h3><h4 id="直接访问："><a href="#直接访问：" class="headerlink" title="直接访问："></a>直接访问：</h4><p>对非容器类型可以直接访问。所有的数值类型都归到这一类。（数字）</p>
+<h4 id="顺序访问："><a href="#顺序访问：" class="headerlink" title="顺序访问："></a>顺序访问：</h4><p>序列类型是指容器内的元素按从 0 开始的索引顺序访问。一次可以访问一个元素或多个元素， 也就是切片(slice)。字符串， 列表和元组都归到这一类。Python 不支持字符类型，因此，虽然字符串是简单文字类型，因为它有能力按照顺序访问子字符串，所以也将它归到序列类型。（字符串、列表、元组）</p>
+<h4 id="映射访问："><a href="#映射访问：" class="headerlink" title="映射访问："></a>映射访问：</h4><p>映射类型类似序列的索引属性，不过它的索引并不使用顺序的数字偏移量取值， 它的元素无序存放， 通过一个唯一的 key 来访问， 这就是映射类型， 它容纳的是哈希键-值对的集合。（字典）        </p>
+<h3 id="对象比较"><a href="#对象比较" class="headerlink" title="对象比较"></a>对象比较</h3><h4 id="对象值的比较："><a href="#对象值的比较：" class="headerlink" title="对象值的比较："></a>对象值的比较：</h4><p>一般的比较时针对对象的值的比较而不是对象本身的比较，比较运算符有‘==’、‘&gt;’、’&lt;’、’&lt;=’、’&gt;=’、’!=’       </p>
+<h4 id="对象身份的比较："><a href="#对象身份的比较：" class="headerlink" title="对象身份的比较："></a>对象身份的比较：</h4><p>Python提供了is和is not运算符来测试两个变量是否指向同一个对象。a is b这个表达式等价于表达式<br><code>id(a) == id(b)</code></p>
+<p>** 注：在Python中，整数和短小的字符，Python都会缓存这些对象，以便重复使用。当我们创建多个等于1的引用时，实际上是让所有这些引用指向同一个对象。a = 1b = 1print id(a)print id(b)上面程序返回112466961124669可见a和b实际上是指向同一个对象的两个引用。为了检验两个引用指向同一个对象，我们可以用is关键字。is用于判断两个引用所指的对象是否相同。**</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># True</span></span><br><span class="line">a = <span class="number">1</span></span><br><span class="line">b = <span class="number">1</span></span><br><span class="line">print(a <span class="keyword">is</span> b)</span><br><span class="line"></span><br><span class="line"><span class="comment"># True</span></span><br><span class="line">a = <span class="string">"good"</span></span><br><span class="line">b = <span class="string">"good"</span></span><br><span class="line">print(a <span class="keyword">is</span> b)</span><br><span class="line"></span><br><span class="line"><span class="comment"># True</span></span><br><span class="line">c = <span class="string">"very good morning 你好啊askhdkjashdjkhasl快乐圣诞节分厘卡三季稻立刻发手里的解放螺丝钉解放了开始锻炼腹肌"</span></span><br><span class="line">d = <span class="string">"very good morning 你好啊askhdkjashdjkhasl快乐圣诞节分厘卡三季稻立刻发手里的解放螺丝钉解放了开始锻炼腹肌"</span></span><br><span class="line">print(c <span class="keyword">is</span> d)</span><br><span class="line"></span><br><span class="line"><span class="comment"># False</span></span><br><span class="line">a = []</span><br><span class="line">b = []</span><br><span class="line">print(a <span class="keyword">is</span> b)</span><br></pre></td></tr></table></figure>
+
+<p><strong>上面的注释为相应的运行结果。可以看到，由于Python缓存了整数和短字符串，因此每个对象只存有一份。</strong></p>
+ 
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Donate
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2017/10/01/Python%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%EF%BC%88%E7%AC%AC2%E7%89%88%EF%BC%89--%2000/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2017/10/03/Python%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%EF%BC%88%E7%AC%AC2%E7%89%88%EF%BC%89--%2001/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Python核心编程（第2版）-- 01
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2017/10/01/Hello%20Blog/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Hello Blog</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2020
+        <i class="ri-heart-fill heart_icon"></i> Panta Sun
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+    <script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/16/2020 02:29:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "爱敏宝儿已经 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+    setInterval("createtime()",250);
+    </script>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.jpg" alt="Panta&#39; Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝肥宅快乐水吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

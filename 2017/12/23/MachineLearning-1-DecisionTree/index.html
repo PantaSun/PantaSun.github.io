@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    MachineLearning-1-DecisionTree |  Panta&#39; Blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/images/bitbug_favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-MachineLearning-1-DecisionTree"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  MachineLearning-1-DecisionTree
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2017/12/23/MachineLearning-1-DecisionTree/" class="article-date">
+  <time datetime="2017-12-23T13:44:43.000Z" itemprop="datePublished">2017-12-23</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/">监督学习</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">3.4k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">14 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="决策树实践"><a href="#决策树实践" class="headerlink" title="决策树实践"></a>决策树实践</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><blockquote>
+<p>机器学习中，决策树是一个预测模型；他代表的是对象属性与对象值之间的一种映射关系。树中每个节点表示某个对象，而每个分叉路径则代表某个可能的属性值，而每个叶节点则对应从根节点到该叶节点所经历的路径所表示的对象的值。决策树仅有单一输出，若欲有复数输出，可以建立独立的决策树以处理不同输出。 数据挖掘中决策树是一种经常要用到的技术，可以用于分析数据，同样也可以用来作预测。<br>从数据产生决策树的机器学习技术叫做决策树学习,通俗说就是决策树。 —摘自<a href="https://zh.wikipedia.org/wiki/%E5%86%B3%E7%AD%96%E6%A0%91" target="_blank" rel="noopener">维基百科</a></p>
+</blockquote>
+<h3 id="优缺点及适用数据类型"><a href="#优缺点及适用数据类型" class="headerlink" title="优缺点及适用数据类型"></a>优缺点及适用数据类型</h3><blockquote>
+</blockquote>
+<ul>
+<li>优点：计算复杂度不高，输出结果容易理解，对中间值的缺失不敏感，可以处理不相关特征数据。</li>
+<li>缺点：可能会产生过度匹配</li>
+<li>适用数据类型：数值型和标称型</li>
+</ul>
+<h3 id="决策树构造"><a href="#决策树构造" class="headerlink" title="决策树构造"></a>决策树构造</h3><p>  决策树的主要思想就是对数据集按照一定的规则进行划分，其大致的算法流程伪码如下：</p>
+<pre><code>def createBranch():
+  if 数据集中每一个样本都属于同一分类：
+      return 类别标签
+  else:
+      找到最先用来划分数据集的特征
+      划分数据集
+      创建分支节点
+          for 每个数据子集：
+              调用createBranch()
+      return 分支节点</code></pre><p>  因此在构造决策树时最主要的问题就是找到当前数据集中用来最先进行划分数据集的特征，也就是说在将数据集分类时，我们应该先根据哪个特征来进行划分，这里可以将这个特征成为最优特征。关于最优特征目前有很多算法。</p>
+<blockquote>
+<p>常用决策树算法有ID3，C4.5和CART。它们都是采用贪心（即非回溯的）方法，自顶向下递归的分治方法构造。这几个算法选择属性划分的方法各不相同，ID3使用的是信息增益，C4.5使用的是信息增益率，而CART使用的是Gini基尼指数。</p>
+</blockquote>
+<h2 id="常用算法及Python实现"><a href="#常用算法及Python实现" class="headerlink" title="常用算法及Python实现"></a>常用算法及Python实现</h2><p><em>下面只对ID3算法进行代码实现。</em></p>
+<h3 id="ID3算法"><a href="#ID3算法" class="headerlink" title="ID3算法"></a>ID3算法</h3><blockquote>
+<p>ID3算法（Iterative Dichotomiser 3 迭代二叉树3代）是一个由Ross Quinlan发明的用于决策树的算法。<br>这个算法是建立在奥卡姆剃刀的基础上：越是小型的决策树越优于大的决策树（简单理论）。尽管如此，该算法也不是总是生成最小的树形结构。而是一个启发式算法。奥卡姆剃刀阐述了一个信息熵的概念：$$I_E(i)=-\sum_{j=1}^{m}f(i,j)log_2f(i,j)$$ </p>
+</blockquote>
+<blockquote>
+<p>熵被用来衡量一个随机变量出现的期望值。熵越大，一个变量的不确定性就越大（也就是可取的值很多），把它搞清楚所需要的信息量也就越大，熵是整个系统的平均消息量。 信息熵是信息论中用于度量信息量的一个概念。一个系统越是有序，信息熵就越低；反之，一个系统越是混乱，信息熵就越高。所以，信息熵也可以说是系统有序化程度的一个度量。</p>
+</blockquote>
+<h4 id="熵（Entropy）的计算公式"><a href="#熵（Entropy）的计算公式" class="headerlink" title="熵（Entropy）的计算公式"></a>熵（Entropy）的计算公式</h4><blockquote>
+<p>熵定义为信息的期望值。先看看信息的定义：</p>
+</blockquote>
+<blockquote>
+<p>$$l(x_i)=−log_2p(x_i)$$</p>
+</blockquote>
+<blockquote>
+<p>其中，$p(x_i)$是选择该分类的概率。对D中的元组所有分类所有可能值的信息期望，即熵，计算公式如下：</p>
+</blockquote>
+<blockquote>
+<p>$$Entropy=H(D)=E(I(D))=−\sum_{i}^{n}p_ilog_2(p_i)$$ $p_i$是D中任意元组属于类$C_i$非零概率。<br>熵越大，说明系统越混乱，携带的信息就越少。熵越小，说明系统越有序，携带的信息就越多。信息的作用就是在于消除不确定性。</p>
+</blockquote>
+<blockquote>
+<p>ID3划分特征使用的就是信息增益IG。一个属性的信息增益越大，表明属性对样本的熵减少的能力就更强，该属性使得数据所属类别的不确定性变为确定性的能力越强。信息增益在统计学中称为互信息，互信息是条件概率与后验概率的比值，化简之后就可以得到信息增益。所以说互信息其实就是信息增益。计算方法【互信息=熵-条件熵】。熵描述的是不确定性。熵越大，不确定性就越大，条件熵H（B|A）描述的是在A给定的条件下B的不确定性，如果条件熵越小，表示不确定性就越小，那么B就越容易确定结果。所以使用熵减去条件熵，就得到了信息增益，他描述的不确定性的降低程度，可以用来度量两个变量的相关性。比如，在给定一个变量的条件下，另一个变量它的不确定性能够降低多少，如果不确定性降低得越多，那么它的确定性就越大，就越容易区分，两者就越相关。注：期望信息越小，分区的纯度越高。</p>
+</blockquote>
+<h4 id="信息增益计算"><a href="#信息增益计算" class="headerlink" title="信息增益计算"></a>信息增益计算</h4><blockquote>
+<p>首先计算特征A对数据集D的经验条件熵H(D|A),在数学上就是条件概率分布（Condition Probability）.</p>
+</blockquote>
+<blockquote>
+<p>$$H(D|A)=\sum_{j}\cfrac{|D_j|}{|D|}×H(D_j)$$，项$\cfrac{|D_j|}{|D|}$充当第j个分区的权重<br>引入条件熵，在信息论中主要是为了消除结果的不确定性。然后计算信息增益</p>
+</blockquote>
+<blockquote>
+<p>$$Gain(A)=H(D)−H(D|A)$$<br>其中，Gain(A)即为所求的信息增益。</p>
+</blockquote>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><h4 id="创建产生测试数据的方法"><a href="#创建产生测试数据的方法" class="headerlink" title="创建产生测试数据的方法"></a>创建产生测试数据的方法</h4><p>测试数据如下表“海洋生物数据”所示，为了方便处理将两个特征的“是”和“否”分别用“1”和“0”代替，分类标签的“是”和“否”分别用“yes”和“no”代替。</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="center">不浮出水面是否可以生存</th>
+<th align="center">是否有脚蹼</th>
+<th align="center">属于鱼类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">是</td>
+<td align="center">是</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">是</td>
+<td align="center">是</td>
+<td align="center">是</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">是</td>
+<td align="center">否</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">否</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">否</td>
+<td align="center">是</td>
+<td align="center">否</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_data_set</span><span class="params">()</span>:</span></span><br><span class="line">    data_set = [</span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>, <span class="string">'yes'</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>, <span class="string">'yes'</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">0</span>, <span class="string">'no'</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">1</span>, <span class="string">'no'</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">1</span>, <span class="string">'no'</span>]</span><br><span class="line">    ]</span><br><span class="line">    labels = [<span class="string">'no surfacing'</span>, <span class="string">'flippers'</span>]</span><br><span class="line">    <span class="keyword">return</span> data_set, labels</span><br><span class="line">data_set, data_labels = create_data_set()</span><br><span class="line">print(data_set)</span><br><span class="line">print(data_labels)</span><br></pre></td></tr></table></figure>
+
+<pre><code>[[1, 1, &apos;yes&apos;], [1, 1, &apos;yes&apos;], [1, 0, &apos;no&apos;], [0, 1, &apos;no&apos;], [0, 1, &apos;no&apos;]]
+[&apos;no surfacing&apos;, &apos;flippers&apos;]</code></pre><h4 id="计算给定数据集的信息熵"><a href="#计算给定数据集的信息熵" class="headerlink" title="计算给定数据集的信息熵"></a>计算给定数据集的信息熵</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> log</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calc_entropy</span><span class="params">(data_set)</span>:</span></span><br><span class="line">    num_data = len(data_set)</span><br><span class="line">    label_counts = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> data <span class="keyword">in</span> data_set:</span><br><span class="line">        current_label = data[<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">if</span> current_label <span class="keyword">not</span> <span class="keyword">in</span> label_counts.keys():</span><br><span class="line">            label_counts[current_label] = <span class="number">0</span></span><br><span class="line">        label_counts[current_label] += <span class="number">1</span></span><br><span class="line">    entropy = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> label_counts:</span><br><span class="line">        prob = float(label_counts[key])/num_data</span><br><span class="line">        entropy -= prob * log(prob, <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> entropy</span><br><span class="line">entropy = calc_entropy(data_set)</span><br><span class="line">entropy</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0.9709505944546686</code></pre><h4 id="创建划分数据集方法"><a href="#创建划分数据集方法" class="headerlink" title="创建划分数据集方法"></a>创建划分数据集方法</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">split_data_set</span><span class="params">(data_set, axis, value)</span>:</span></span><br><span class="line">    re_data_set = []</span><br><span class="line">    <span class="keyword">for</span> data <span class="keyword">in</span> data_set:</span><br><span class="line">        <span class="keyword">if</span> data[axis] == value:</span><br><span class="line">            re_data = data[:axis]         <span class="comment"># 将data列表中该特征之前的特征放到re_data列表中</span></span><br><span class="line">            re_data.extend(data[axis+<span class="number">1</span>:]) <span class="comment"># 将data列表中该特征之后的特征也放到re_data中，说白了就是剔除了特征值为value的特征</span></span><br><span class="line">            re_data_set.append(re_data)</span><br><span class="line">    <span class="keyword">return</span> re_data_set</span><br><span class="line"><span class="comment">## 测试</span></span><br><span class="line">print(<span class="string">"data_set："</span>, data_set) <span class="comment"># 再次打印上文的data_set</span></span><br><span class="line">re_data = split_data_set(data_set, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">print(<span class="string">"re_data："</span>, re_data)</span><br></pre></td></tr></table></figure>
+
+<pre><code>data_set： [[1, 1, &apos;yes&apos;], [1, 1, &apos;yes&apos;], [1, 0, &apos;no&apos;], [0, 1, &apos;no&apos;], [0, 1, &apos;no&apos;]]
+re_data： [[1, &apos;yes&apos;], [1, &apos;yes&apos;], [0, &apos;no&apos;]]</code></pre><p>从上述结果可以看出，我们在data_set数据集中将每个样本里符合第1个（即索引为0的）特征的值为1的样本提取出来了。</p>
+<h3 id="创建选择最优特征方法"><a href="#创建选择最优特征方法" class="headerlink" title="创建选择最优特征方法"></a>创建选择最优特征方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">choose_best_feature</span><span class="params">(data_set)</span>:</span></span><br><span class="line">    num_feature = len(data_set[<span class="number">0</span>]) - <span class="number">1</span>  <span class="comment"># 这里减一是因为每个样本中最后一个值是标签，而不是特征值</span></span><br><span class="line">    num_data = len(data_set)</span><br><span class="line">    data_set_entropy = calc_entropy(data_set)</span><br><span class="line">    gain = <span class="number">0.0</span></span><br><span class="line">    best_feature = <span class="number">-1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num_feature):  </span><br><span class="line">        feature_list = [example[i] <span class="keyword">for</span> example <span class="keyword">in</span> data_set]</span><br><span class="line">        unique_values = set(feature_list)</span><br><span class="line">        new_entropy = <span class="number">0.0</span></span><br><span class="line">        <span class="keyword">for</span> value <span class="keyword">in</span> unique_values:</span><br><span class="line">            re_data_set = split_data_set(data_set, i, value)</span><br><span class="line">            prob = len(re_data_set)/float(num_data)</span><br><span class="line">            new_entropy += prob * calc_entropy(re_data_set)</span><br><span class="line">        new_gain = data_set_entropy - new_entropy</span><br><span class="line">        <span class="keyword">if</span> new_gain &gt; gain:</span><br><span class="line">            gain = new_gain</span><br><span class="line">            best_feature = i</span><br><span class="line">    <span class="keyword">return</span> best_feature</span><br></pre></td></tr></table></figure>
+
+<p>继续使用上文的data_set进行数据测试：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_set</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[[1, 1, &apos;yes&apos;], [1, 1, &apos;yes&apos;], [1, 0, &apos;no&apos;], [0, 1, &apos;no&apos;], [0, 1, &apos;no&apos;]]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">best_feature = choose_best_feature(data_set)</span><br><span class="line">best_feature</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0</code></pre><h4 id="递归创建决策树"><a href="#递归创建决策树" class="headerlink" title="递归创建决策树"></a>递归创建决策树</h4><p>决策树递归结束的条件为下列两种情况：</p>
+<ol>
+<li>遍历完所有划分数据集的特征</li>
+<li>每个分支下的所有样本实例都具有相同的分类</li>
+</ol>
+<p>注：对于第一点，当遍历完所有特征后，如果发现子数据集中仍有多种标签分类，则采用少数服从多数的原则将该子集进行分类。下面的majority_class方法表达的就是这个意思。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">majority_class</span><span class="params">(class_list)</span>:</span></span><br><span class="line">    class_count = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> cla <span class="keyword">in</span> class_list:</span><br><span class="line">        <span class="keyword">if</span> cla <span class="keyword">not</span> <span class="keyword">in</span> class_count.keys():</span><br><span class="line">            class_count[cla] = <span class="number">0</span></span><br><span class="line">        class_count[cla] += <span class="number">1</span></span><br><span class="line">    sorted_class_count = sorted(class_count.items(), key=operator.items(<span class="number">1</span>), reverse=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">return</span> sorted_class_count[<span class="number">0</span>][<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<p>解决完递归结束条件后，开始正式创建决策树：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_tree</span><span class="params">(data_set, data_labels)</span>:</span></span><br><span class="line">    labels = data_labels[:] <span class="comment"># 防止改变原data_labels列表</span></span><br><span class="line">    class_list = [example[<span class="number">-1</span>] <span class="keyword">for</span> example <span class="keyword">in</span> data_set]</span><br><span class="line">    <span class="comment"># 符合递归结束条件2</span></span><br><span class="line">    <span class="keyword">if</span> class_list.count(class_list[<span class="number">0</span>]) == len(class_list):</span><br><span class="line">        <span class="keyword">return</span> class_list[<span class="number">0</span>]</span><br><span class="line">    <span class="comment"># 符合递归结束条件1</span></span><br><span class="line">    <span class="keyword">if</span> len(data_set[<span class="number">0</span>]) == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> majority_class(class_list)</span><br><span class="line">    <span class="comment"># 计算并获取最优特征 </span></span><br><span class="line">    best_feature = choose_best_feature(data_set)</span><br><span class="line">    best_feature_label = labels[best_feature]</span><br><span class="line">    decision_tree = &#123;best_feature_label: &#123;&#125;&#125;</span><br><span class="line">    <span class="keyword">del</span>(labels[best_feature])</span><br><span class="line">    feature_values = [example[best_feature] <span class="keyword">for</span> example <span class="keyword">in</span> data_set]</span><br><span class="line">    unique_values = set(feature_values)</span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> unique_values:</span><br><span class="line">        sub_labels = labels[:]</span><br><span class="line">        decision_tree[best_feature_label][value] = create_tree(split_data_set(data_set, best_feature, value), sub_labels)</span><br><span class="line">    <span class="keyword">return</span> decision_tree</span><br></pre></td></tr></table></figure>
+
+<p>上述代码首先创建class_list列表，其中包含了数据集的所有分类标签。通过对class_list列表的进行两步判断，看是否符合两个递归结束条件中的任意一个。接下来开始创建决策树，先获取最优特征，以及该特征的所有特征值，并将最优特征从特征标签中删除。根据特征值划分子集，对每个子集递归调用create_tree。为了在递归时不改变原data_labels，所以使用新变量labels代替原始列表，sub_labels的道理类似。</p>
+<h4 id="下面进行测试输出："><a href="#下面进行测试输出：" class="headerlink" title="下面进行测试输出："></a>下面进行测试输出：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#### 测试数据</span></span><br><span class="line">data_set, data_labels</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>([[1, 1, &apos;yes&apos;], [1, 1, &apos;yes&apos;], [1, 0, &apos;no&apos;], [0, 1, &apos;no&apos;], [0, 1, &apos;no&apos;]],
+ [&apos;no surfacing&apos;, &apos;flippers&apos;])</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#### 创建决策树</span></span><br><span class="line">dt = create_tree(data_set,data_labels)</span><br><span class="line">dt</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>{&apos;no surfacing&apos;: {0: &apos;no&apos;, 1: {&apos;flippers&apos;: {0: &apos;no&apos;, 1: &apos;yes&apos;}}}}</code></pre><h3 id="测试算法：使用决策树进行分类"><a href="#测试算法：使用决策树进行分类" class="headerlink" title="测试算法：使用决策树进行分类"></a>测试算法：使用决策树进行分类</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">classify</span><span class="params">(tree, feature_labels, test_data)</span>:</span></span><br><span class="line">    first_str = list(tree.keys())[<span class="number">0</span>]</span><br><span class="line">    second_dic = tree[first_str]</span><br><span class="line">    feat_index = feature_labels.index(first_str)</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> second_dic.keys():</span><br><span class="line">        <span class="keyword">if</span> test_data[feat_index] == key:</span><br><span class="line">            <span class="keyword">if</span> type(second_dic[key]).__name__ == <span class="string">'dict'</span>:</span><br><span class="line">                class_label = classify(second_dic[key], feature_labels, test_data)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                class_label = second_dic[key]</span><br><span class="line">    <span class="keyword">return</span> class_label</span><br><span class="line"><span class="comment">#### 分类测试</span></span><br><span class="line">class_label1 = classify(dt, data_labels, [<span class="number">1</span>, <span class="number">0</span>])</span><br><span class="line">class_label2 = classify(dt, data_labels, [<span class="number">1</span>, <span class="number">1</span>])</span><br><span class="line">print(<span class="string">"class_label1："</span>, class_label1)</span><br><span class="line">print(<span class="string">"class_label2："</span>, class_label2)</span><br></pre></td></tr></table></figure>
+
+<pre><code>class_label1： no
+class_label2： yes</code></pre><h4 id="用决策树预测隐形眼镜类型"><a href="#用决策树预测隐形眼镜类型" class="headerlink" title="用决策树预测隐形眼镜类型"></a>用决策树预测隐形眼镜类型</h4><p><em>这个例子是大部分人在学习决策树都会用到</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'lenses.txt'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    lines = f.read().split(<span class="string">'\n'</span>)</span><br><span class="line">    lenses = [line.split(<span class="string">'\t'</span>) <span class="keyword">for</span> line <span class="keyword">in</span> lines]</span><br><span class="line">lenses <span class="comment"># 查看数据</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[[&apos;young&apos;, &apos;myope&apos;, &apos;no&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;young&apos;, &apos;myope&apos;, &apos;no&apos;, &apos;normal&apos;, &apos;soft&apos;],
+ [&apos;young&apos;, &apos;myope&apos;, &apos;yes&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;young&apos;, &apos;myope&apos;, &apos;yes&apos;, &apos;normal&apos;, &apos;hard&apos;],
+ [&apos;young&apos;, &apos;hyper&apos;, &apos;no&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;young&apos;, &apos;hyper&apos;, &apos;no&apos;, &apos;normal&apos;, &apos;soft&apos;],
+ [&apos;young&apos;, &apos;hyper&apos;, &apos;yes&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;young&apos;, &apos;hyper&apos;, &apos;yes&apos;, &apos;normal&apos;, &apos;hard&apos;],
+ [&apos;pre&apos;, &apos;myope&apos;, &apos;no&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;pre&apos;, &apos;myope&apos;, &apos;no&apos;, &apos;normal&apos;, &apos;soft&apos;],
+ [&apos;pre&apos;, &apos;myope&apos;, &apos;yes&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;pre&apos;, &apos;myope&apos;, &apos;yes&apos;, &apos;normal&apos;, &apos;hard&apos;],
+ [&apos;pre&apos;, &apos;hyper&apos;, &apos;no&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;pre&apos;, &apos;hyper&apos;, &apos;no&apos;, &apos;normal&apos;, &apos;soft&apos;],
+ [&apos;pre&apos;, &apos;hyper&apos;, &apos;yes&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;pre&apos;, &apos;hyper&apos;, &apos;yes&apos;, &apos;normal&apos;, &apos;no lenses&apos;],
+ [&apos;presbyopic&apos;, &apos;myope&apos;, &apos;no&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;presbyopic&apos;, &apos;myope&apos;, &apos;no&apos;, &apos;normal&apos;, &apos;no lenses&apos;],
+ [&apos;presbyopic&apos;, &apos;myope&apos;, &apos;yes&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;presbyopic&apos;, &apos;myope&apos;, &apos;yes&apos;, &apos;normal&apos;, &apos;hard&apos;],
+ [&apos;presbyopic&apos;, &apos;hyper&apos;, &apos;no&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;presbyopic&apos;, &apos;hyper&apos;, &apos;no&apos;, &apos;normal&apos;, &apos;soft&apos;],
+ [&apos;presbyopic&apos;, &apos;hyper&apos;, &apos;yes&apos;, &apos;reduced&apos;, &apos;no lenses&apos;],
+ [&apos;presbyopic&apos;, &apos;hyper&apos;, &apos;yes&apos;, &apos;normal&apos;, &apos;no lenses&apos;]]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lenses_labels = [<span class="string">'age'</span>, <span class="string">'prescript'</span>, <span class="string">'astigmatic'</span>, <span class="string">'tearRate'</span>] </span><br><span class="line">lenses_tree = create_tree(lenses, lenses_labels)</span><br><span class="line">lenses_tree</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>{&apos;tearRate&apos;: {&apos;normal&apos;: {&apos;astigmatic&apos;: {&apos;no&apos;: {&apos;age&apos;: {&apos;pre&apos;: &apos;soft&apos;,
+      &apos;presbyopic&apos;: {&apos;prescript&apos;: {&apos;hyper&apos;: &apos;soft&apos;, &apos;myope&apos;: &apos;no lenses&apos;}},
+      &apos;young&apos;: &apos;soft&apos;}},
+    &apos;yes&apos;: {&apos;prescript&apos;: {&apos;hyper&apos;: {&apos;age&apos;: {&apos;pre&apos;: &apos;no lenses&apos;,
+        &apos;presbyopic&apos;: &apos;no lenses&apos;,
+        &apos;young&apos;: &apos;hard&apos;}},
+      &apos;myope&apos;: &apos;hard&apos;}}}},
+  &apos;reduced&apos;: &apos;no lenses&apos;}}</code></pre><h4 id="使用Matplotlib注解绘制树形图"><a href="#使用Matplotlib注解绘制树形图" class="headerlink" title="使用Matplotlib注解绘制树形图"></a>使用Matplotlib注解绘制树形图</h4><p>正如上面的结果所示，采用文本的当时输出一个决策树时我们很难分辨出该树的枝叶，所以接下来我们将采用注解的形式绘制出树形图。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line">plt.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>]  <span class="comment"># 用来正常显示中文标签</span></span><br><span class="line">plt.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="literal">False</span>  <span class="comment"># 用来正常显示负号</span></span><br><span class="line">decision_node = dict(boxstyle=<span class="string">"sawtooth"</span>, fc=<span class="string">"0.8"</span>)</span><br><span class="line">leaf_node = dict(boxstyle=<span class="string">"round4"</span>, fc=<span class="string">"0.8"</span>)</span><br><span class="line">arrow_args = dict(arrowstyle=<span class="string">"&lt;-"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_node</span><span class="params">(node_txt, center_pt, parent_pt, node_type)</span>:</span></span><br><span class="line">    create_plot.axl.annotate(node_txt, xy=parent_pt, xycoords=<span class="string">'axes fraction'</span>, xytext=center_pt, textcoords=<span class="string">'axes fraction'</span>, </span><br><span class="line">                             va=<span class="string">'center'</span>, ha=<span class="string">'center'</span>, bbox=node_type, arrowprops=arrow_args)</span><br><span class="line"><span class="comment">##### 先来一个简单的画图测试</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_plot</span><span class="params">()</span>:</span></span><br><span class="line">    fig = plt.figure(<span class="number">1</span>, facecolor=<span class="string">'white'</span>)</span><br><span class="line">    fig.clf()</span><br><span class="line">    create_plot.axl = plt.subplot(<span class="number">111</span>, frameon=<span class="literal">False</span>)</span><br><span class="line">    plot_node(<span class="string">'决策节点'</span>, (<span class="number">0.5</span>, <span class="number">0.1</span>), (<span class="number">0.1</span>, <span class="number">0.5</span>), decision_node)</span><br><span class="line">    plot_node(<span class="string">'叶子节点'</span>, (<span class="number">0.8</span>, <span class="number">0.1</span>), (<span class="number">0.3</span>, <span class="number">0.8</span>),leaf_node)</span><br><span class="line">    plt.show()</span><br><span class="line">create_plot()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="http://oyu4td7fe.bkt.clouddn.com/output_24_0.png" alt="png"></p>
+<p>未完待续。。。</p>
+ 
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Donate
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2017/12/23/MachineLearning-1-DecisionTree/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MachineLearning/" rel="tag">MachineLearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2018/01/24/C-Primer-Chapter01/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            C++Primer--Chapter01
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2017/10/05/Python%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B%EF%BC%88%E7%AC%AC2%E7%89%88%EF%BC%89--%2002/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Python核心编程（第2版）-- 02</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2020
+        <i class="ri-heart-fill heart_icon"></i> Panta Sun
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+    <script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/16/2020 02:29:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "爱敏宝儿已经 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+    setInterval("createtime()",250);
+    </script>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.jpg" alt="Panta&#39; Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝肥宅快乐水吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

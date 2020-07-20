@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    C++Primer--Chapter03 |  Panta&#39; Blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/images/bitbug_favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-C-Primer-Chapter03"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  C++Primer--Chapter03
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2018/01/26/C-Primer-Chapter03/" class="article-date">
+  <time datetime="2018-01-26T14:28:59.000Z" itemprop="datePublished">2018-01-26</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Reading-notes/">Reading notes</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.8k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">10 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="第三章-字符串、向量和数组"><a href="#第三章-字符串、向量和数组" class="headerlink" title="第三章 字符串、向量和数组"></a>第三章 字符串、向量和数组</h2><h3 id="命名空间using的声明"><a href="#命名空间using的声明" class="headerlink" title="命名空间using的声明"></a>命名空间<code>using</code>的声明</h3><ul>
+<li><strong>操作符<code>::</code>的意思是：</strong>编译器应从操作符左侧名字所示的作用域中寻找右侧那个名字。</li>
+<li><strong><code>std::cin</code> 的意思是：</strong>使用命名空间 <code>std</code> 中的名字 <code>cin</code> 。</li>
+<li>上面这种方法比较麻烦，每次要使用<code>cin</code>的时候都要使用<code>std::</code>，因此可以使用<code>using</code>声明</li>
+<li><strong>格式：</strong><code>using namespace::name;</code>，例如：<code>using std::cin;</code>。一旦这样声明了<code>cin</code>，则之后再使用<code>cin</code> 就不需要每次都加专门的<code>std::</code>前缀。</li>
+<li>每个<code>using</code>声明引入命名空间的一个成员。</li>
+<li><strong>头文件不应包含<code>using</code>声明：</strong>因为头文件的内容会被拷贝到所有引用这个头文件的其他文件中，这样可能会对其他文件内容产生冲突。</li>
+</ul>
+<h3 id="标准库类型string"><a href="#标准库类型string" class="headerlink" title="标准库类型string"></a>标准库类型<code>string</code></h3><ul>
+<li><p><strong>范围<code>for</code>循环语句</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> s = <span class="string">"hello world!!!"</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> &amp;c: s)</span><br><span class="line">  c = <span class="built_in">toupper</span>(c);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; s &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="标准库类型vector"><a href="#标准库类型vector" class="headerlink" title="标准库类型vector"></a>标准库类型<code>vector</code></h3><ul>
+<li><code>vector</code>表示对象的集合，其中所有对象的类型相同。</li>
+<li>引用不是对象，所以不存在包含引用的<code>vector</code>。</li>
+</ul>
+<h4 id="定义和初始化vector对象"><a href="#定义和初始化vector对象" class="headerlink" title="定义和初始化vector对象"></a>定义和初始化<code>vector</code>对象</h4><ul>
+<li><p>*<em>列表初始化 *</em></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v1&#123;<span class="string">"a"</span>, <span class="string">"an"</span>, <span class="string">"the"</span>&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>创建指定数量的元素</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ivec</span><span class="params">(<span class="number">10</span>, <span class="number">-1</span>)</span></span>;  <span class="comment">// 10 个 int 类型的元素，每个都被初始化为 -1</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">svec</span><span class="params">(<span class="number">10</span>, <span class="string">"hi"</span>)</span></span>; <span class="comment">// 10 个 string 类型的元素，每个都被初始化为 "hi"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>值初始化</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ivec</span><span class="params">(<span class="number">10</span>)</span></span>; <span class="comment">// 10 个元素，每个都初始化为 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">svec</span><span class="params">(<span class="number">10</span>)</span> <span class="comment">// 10 个元素，每个都被初始化为空 string 对象</span></span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<ul>
+<li><p>一般来说用圆括号<code>()</code>，可以说提供的值是用来构造<code>vector</code>对象的，而花括号<code>{}</code>是用来列表初始化<code>vector</code>对象的，但也有特例：如果使用了花括号的形式，但括号里提供的值又不能用来列表初始化，那就要考虑是用这样的值来构造<code>vector</code>对象了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果列表初始化一个含有string对象的vector对象，应该提供能赋值给string对象的初值。</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v1&#123;<span class="number">10</span>&#125;; <span class="comment">//v1 有10个默认初始化的值</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v2&#123;<span class="number">10</span>, <span class="string">"hi"</span>&#125;; <span class="comment">// v2 有10个值为”hi“的元素</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">v3</span><span class="params">(<span class="number">10</span>, <span class="string">"hi"</span>)</span></span>; <span class="comment">// 这才是常规的构造vector的表达</span></span><br></pre></td></tr></table></figure>
+
+<p>​</p>
+</li>
+</ul>
+<h4 id="向vector对象中添加元素"><a href="#向vector对象中添加元素" class="headerlink" title="向vector对象中添加元素"></a>向<code>vector</code>对象中添加元素</h4><ul>
+<li><p>用<code>vector</code>的成员函数<code>push_back</code>向一个事先创建好的<code>vector</code>对象中添加元素，添加到<code>vector</code>的尾端。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">100</span>; i++)</span><br><span class="line">	v.push_back(i);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不能使用下标形式添加元素，<code>vector</code>对象（以及<code>string</code> 对象）的下标运算可用于访问已存在的元素，而不能用于添加元素。</p>
+</li>
+<li><p>再次强调，只能对确知已存在的元素执行下标操作！确保下标合法的一种有效的手段是尽可能的使用范围<code>for</code>循环语句。</p>
+</li>
+<li><p>但是，如果某个下标对应的对象值已经存在，则可以用下标形式来修改其值，因为修改值而不是新添加一个对象到<code>vector</code>中，若想新添加一个元素到<code>vector</code>中，就需要使用<code>push_back</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">v2</span><span class="params">(<span class="number">10</span>,<span class="number">0</span>)</span></span>;</span><br><span class="line">v2[<span class="number">5</span>] = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; v2[<span class="number">5</span>] &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="迭代器介绍"><a href="#迭代器介绍" class="headerlink" title="迭代器介绍"></a>迭代器介绍</h3><p>所有标准库容器都可以使用迭代器， 但其中只有少数几种才同时支持下标操作。严格来说，<code>string</code>对象不属于容器类型，但<code>string</code>支持很多与容器类型类似的操作。</p>
+<h4 id="使用迭代器"><a href="#使用迭代器" class="headerlink" title="使用迭代器"></a>使用迭代器</h4><ul>
+<li><p>有迭代器的类型拥有返回迭代器的成员。比如，这些类型都有名为<code>begin</code>和<code>end</code>的成员</p>
+</li>
+<li><ul>
+<li><p><strong><code>begin</code>：</strong>返回指向第一个元素的迭代器</p>
+</li>
+<li><p><strong><code>end</code> ：</strong>返回指向容器尾元素的下一个位置的迭代器，该迭代器常被成为“尾后迭代器”。</p>
+</li>
+<li><p>若容器为空的话，<code>begin</code>和<code>end</code>返回的是同一个迭代器。</p>
+</li>
+<li><pre><code class="c++"><span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; <span class="title">v</span><span class="params">(<span class="number">10</span>, <span class="string">"hi"</span>)</span></span>;
+<span class="keyword">auto</span> a = v.<span class="built_in">begin</span>();
+<span class="keyword">auto</span> b = v.<span class="built_in">end</span>();
+&lt;!--￼<span class="number">7</span>--&gt;</code></pre>
+</li>
+</ul>
+</li>
+<li><p><strong>结合解引用和成员访问操作</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(*it).empty() &#x2F;&#x2F;解引用it，然后调用结果对象的 empty 成员</span><br><span class="line">*it.empty()   &#x2F;&#x2F;错误用法，先调用 it 的 empty 成员，但 it 是个迭代器，没有 empty 成员</span><br><span class="line">(*it).empty() 有个简化用法 ：it-&gt;empty()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>但凡是使用了迭代器的循环体，都不要向迭代器所属的容器添加元素</p>
+</li>
+</ul>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><ul>
+<li>数组是存放类型相同的对象的容器，但数组大小固定不变，不能随意向数组中添加元素。</li>
+</ul>
+<h4 id="定义和初始化内置数组"><a href="#定义和初始化内置数组" class="headerlink" title="定义和初始化内置数组"></a>定义和初始化内置数组</h4><ul>
+<li><p>数组的声明形式为：<code>类型 a[d]</code>，<code>a</code>是数组的名字，<code>d</code>是数组的维度，维度说明了数组中元素的个数，所以必须大于0。维度在编译时应该是已知的，也就是说维度必须是一个常量表达式。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 书中说这种方式是不允许的，书中认为 cnt 不是一个常量表达式，</span></span><br><span class="line"><span class="comment">// 但是我执行下边这种方式时，编译器并未报错。</span></span><br><span class="line"><span class="comment">// 但我觉得书中的“要用常量表达式来定义数组”确实会严谨一些</span></span><br><span class="line"><span class="keyword">unsigned</span> cnt = <span class="number">42</span>;</span><br><span class="line"><span class="built_in">string</span> bad[cnt];</span><br><span class="line"><span class="comment">// 严谨的做法</span></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">unsigned</span> sz = <span class="number">42</span>;</span><br><span class="line"><span class="built_in">string</span> good[sz];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义数组时要指明数组的类型，不允许使用<code>auto</code>关键字由初始值列表来推断类型。</p>
+</li>
+<li><p>与 <code>vector</code> 一样，数组的元素必须为对象，所以不能存放引用。</p>
+</li>
+<li><p>数组在定义时可以忽略维度，编译器会根据初始值的数量计算并推测出维度。若只是不带初始值时忽略维度值，就会报错（毕竟编译器不会凭空计算并推测维度值）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>&#125;; <span class="comment">// 维度为3的数组</span></span><br><span class="line"><span class="keyword">int</span> b[];             <span class="comment">// 若没有初始值列表就会报错</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符数组还可以用字符串字面值来初始化，不过要注意的是字符串字面值结尾处还有一个空字符，这个空字符也会像其他字符一样被拷贝到字符数组中。<code>char a[6]=&quot;daniel&quot;;</code>这种初始化是错误的因为字符数组大小必须至少为7，前6个放字面值，另一个存放结尾处的空字符。</p>
+</li>
+<li><p>不能将数组的内容拷贝给其他数组作为初始值，也不能用数组为其他数组赋值。</p>
+</li>
+<li><p><strong>复杂数组的声明</strong></p>
+<ul>
+<li><code>int *ptrs[10];</code> :<code>ptrs</code> 是含有 10 个整型指针的数组。默认情况下，类型修饰符从右向左依次绑定，对于 <code>ptrs</code> 来说，首先定义一个大小为 10 的数组，然后里面存放的是指向 <code>int</code>型的指针。</li>
+<li><code>int &amp;refs[10] = /* ? */;</code>  ：错误！不存在引用的数组</li>
+<li><code>int (*parray)[10] = &amp;arr;</code> ： <code>parray</code> 指向一个含有 10 个整数的数组。对于 <code>parray</code> 从右向左理解就不合理了，需要从内向外阅读，先看圆括号部分：<code>*parray</code>说明<code>parray</code>是个指针，再看右边：说明 <code>parray</code>指向大小为 10 的数组，最后看左边：知道数组中的元素为 <code>int</code>型。</li>
+<li><code>int (&amp;arrref)[10] = arr;</code>  :<code>arrref</code> 引用一个含有 10  个整数的数组。<code>arrref</code>也可以用由内向外来理解，首先知道<code>arrref</code> 是一个引用，然后知道<code>arrref</code>引用的对象是一个大小为 10 的数组，最后知道数组的类型是 <code>int</code>型。</li>
+<li><code>int *(&amp;array)[10] = ptrs;</code>  :<code>array</code>是一个数组的引用，该数组含有 10 个指针。</li>
+</ul>
+</li>
+</ul>
+<h4 id="访问数组元素"><a href="#访问数组元素" class="headerlink" title="访问数组元素"></a>访问数组元素</h4><ul>
+<li>数组的下标通常定义为<code>size_t</code>类型。</li>
+<li>在使用数组时，应避免下标越界。</li>
+</ul>
+<h4 id="指针和数组"><a href="#指针和数组" class="headerlink" title="指针和数组"></a>指针和数组</h4><ul>
+<li><p>在大多数表达式中，使用数组来了类型的对象其实就是使用一个指向该数组首元素的指针。</p>
+</li>
+<li><p>指针也是迭代器</p>
+</li>
+<li><p>在很多用到数组名字的地方，编译器会自动将其替换为一个指向数组首元素的指针:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> nums[] = &#123;<span class="string">"aasd"</span>, <span class="string">"onr"</span>, <span class="string">"asd"</span>&#125;;</span><br><span class="line"><span class="built_in">string</span> *p2 = nums; <span class="comment">// 等价于 string *p2; p2 = &amp;nums[0];</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>标准库函数 <code>begin</code>和<code>end</code>：</p>
+<ul>
+<li><p>C++11 新引入了两个名为 <code>begin</code>和<code>end</code>的函数，这两个函数与容器中的两个成员函数功能类似，但数组不是类类型，所以这两个新函数不是成员，因此在使用时应将数组作为它们的参数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[] = &#123;<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> *beg = <span class="built_in">begin</span>(a);</span><br><span class="line"><span class="keyword">int</span> *<span class="built_in">end</span> = <span class="built_in">end</span>(a);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="C-风格字符串"><a href="#C-风格字符串" class="headerlink" title="C 风格字符串"></a>C 风格字符串</h4><ul>
+<li><p>C 标准库<code>String</code>函数</p>
+<ul>
+<li><p><code>strlen(p)</code>：返回 <code>p</code>的长度</p>
+</li>
+<li><p><code>strcmp(p1, p2)</code>：比较<code>p1</code>和<code>p2</code> 的相等性</p>
+</li>
+<li><p><code>strcat(p1, p2)</code>：将 <code>p2</code>附加到<code>p1</code>之后，返回<code>p1</code></p>
+</li>
+<li><p><code>strcpy(p1, p2)</code>：将 <code>p2</code> 拷贝给 <code>p1</code> （将<code>p1</code>完全覆盖），返回 <code>p1</code></p>
+</li>
+<li><p>上述函数必须传入以空字符作为结束的数组</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误示例</span></span><br><span class="line"><span class="keyword">char</span> ca[] = &#123;<span class="string">'c'</span>, <span class="string">'+'</span>, <span class="string">'+'</span>&#125;;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; <span class="built_in">strlen</span>(ca) &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>虽然不能用数组初始化数组，也不能用<code>vector</code>初始化数组，但可以使用数组初始化<code>vector</code>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> int_arr[] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;;</span><br><span class="line"><span class="comment">// ivec 中会有7个元素，分别是 int_arr 中对用元素的副本</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">ivec</span><span class="params">(<span class="built_in">begin</span>(int_arr), <span class="built_in">end</span>(int_arr))</span></span>;</span><br><span class="line"><span class="comment">// ivec 有三个元素 int_arr[1]、 int_arr[2]、 int_arr[3]</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">subvec</span><span class="params">(int_arr+<span class="number">1</span>, int_arr+<span class="number">4</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h3><ul>
+<li><p>严格来说，C++语言中没有多维数组，有的只是数组的数组。</p>
+</li>
+<li><p>当一个数组的元素仍是数组时，通常使用两个维度来定义它：一个维度表示数组本身大小，另一个维度标示其元素（也是数组）的大小。</p>
+</li>
+<li><p>多维数组的初始化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ia[<span class="number">3</span>][<span class="number">4</span>] = &#123;</span><br><span class="line">  &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;,</span><br><span class="line">  &#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>&#125;,</span><br><span class="line">  &#123;<span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 效果和上一个初始化方式一样</span></span><br><span class="line"><span class="keyword">int</span> ia1[<span class="number">3</span>][<span class="number">4</span>] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>&#125;;</span><br><span class="line"><span class="comment">// 显示的初始化每行首元素</span></span><br><span class="line"><span class="keyword">int</span> ia2[<span class="number">3</span>][<span class="number">4</span>] = &#123;&#123;<span class="number">0</span>&#125;, &#123;<span class="number">4</span>&#125;, &#123;<span class="number">8</span>&#125;&#125;;</span><br><span class="line"><span class="comment">// 显示的初始化第一行元素，其他元素执行默认值初始化</span></span><br><span class="line"><span class="keyword">int</span> ia3[<span class="number">3</span>][<span class="number">4</span>] = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用范围<code>for</code>语句来遍历二维数组如下：第二个 <code>for</code> 循环中的引用（<code>&amp;col</code>）是用来更新数组中的值，如果不用引用，则无法更改值；第一个<code>for</code>循环中的引用（<code>&amp;row</code>）是必须的，这是为了避免数组被自动转换成指针。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">size_t</span> cnt = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> &amp;row : ia)&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;col : row)&#123;   </span><br><span class="line">    col = cnt;</span><br><span class="line">    cnt++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>若像下边这样执行代码，就会报错：因为在执行第一层<code>for</code> 循环时，遍历 <code>ia</code>的所有元素，而这些元素都是大小为4的数组，并且<code>row</code>不是引用，编译器初始化 <code>row</code>时会自动将这些数组形式的元素转换成指向该数组内首元素的指针。这样得到的<code>row</code> 其实是<code>*int</code> 型，显然内层<code>for</code>循环就无法执行了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> row : ia)&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span> col : row)&#123;</span><br><span class="line">	<span class="comment">/*code*/</span>    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>因此要使用范围<code>for</code>语句处理多维数组，除了最内层<code>for</code>循环外，其他所有循环的控制变量都应该是引用类型。</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        Donate
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2018/01/26/C-Primer-Chapter03/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2018/01/28/C-Primer-Chapter04/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            C++Primer--Chapter04
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2018/01/25/C-Primer-Chapter02/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">C++Primer--Chapter02</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2020
+        <i class="ri-heart-fill heart_icon"></i> Panta Sun
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+      <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+    <script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("07/16/2020 02:29:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "爱敏宝儿已经 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+    setInterval("createtime()",250);
+    </script>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/avatar.jpg" alt="Panta&#39; Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝肥宅快乐水吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://gitee.com/pantasun/blogPic/blob/master/common/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>
